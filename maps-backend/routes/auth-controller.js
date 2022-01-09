@@ -2,13 +2,10 @@ const express = require("express");
 const Joi = require("joi");
 const bcrypt = require("bcrypt-inzi");
 const jwt = require("jsonwebtoken");
-const { userModel, otpModel } = require("../model/index");
+const { userModel } = require("../model/index");
 const env = require("../config/env");
-const postmark = require("postmark");
-const { POSTSECRET } = require("../config/env");
-const app = express.Router();
 
-// const client = new postmark.Client(POSTSECRET);
+const app = express.Router();
 
 app.post("/signup", (req, res) => {
   const { error } = validateUser(req.body);
@@ -144,119 +141,6 @@ app.post("/login", (req, res) => {
     } else {
       res.status(409).send({
         message: "User not found",
-      });
-    }
-  });
-});
-
-app.post("/forget-password", (req, res, next) => {
-  if (!req.body.email) {
-    res.status(403).send(`
-            please send email in json body.
-            e.g:
-            {
-                "email": "abc@gmail.com"
-            }`);
-    return;
-  }
-  userModel.findOne({ email: req.body.email }, function (err, user) {
-    if (err) {
-      res.status(500).send({
-        message: "an error occured: " + JSON.stringify(err),
-      });
-    } else if (user) {
-      console.log("user==>", user);
-      const otp = Math.floor(getRandomArbitrary(11111, 99999));
-
-      otpModel
-        .create({
-          email: req.body.email,
-          otp: otp,
-        })
-        .then((doc) => {
-          client
-            .sendEmail({
-              From: "info@envycle.com",
-              To: req.body.email,
-              Subject: "Reset your password",
-              TextBody: `Here is your pasword reset code: ${otp}`,
-            })
-            .then((status) => {
-              console.log("status: ", status);
-              res.status(200).send({
-                message: "email sent with otp",
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log("error in creating otp: ", err);
-          res.status(500).send({ message: "unexpected error " });
-        });
-    } else {
-      res.status(403).send({
-        message: "user not found",
-      });
-    }
-  });
-});
-
-app.post("/forget-password-step-2", (req, res, next) => {
-  if (!req.body.email || !req.body.otp || !req.body.newPassword) {
-    res.status(400).send(`
-        Please send email in JSON body
-        e.g:
-        "email" : "abc@dummy.com"
-        "newPassword" : "123456"
-        "otp" : "xxxxx"
-    `);
-
-    return;
-  }
-  userModel.findOne({ email: req.body.email }, function (err, user) {
-    if (err) {
-      res.status(500).send({
-        message: "an error occured: " + JSON.stringify(err),
-      });
-    } else if (user) {
-      otpModel.find({ email: req.body.email }, function (err, otpData) {
-        if (err) {
-          res.status(500).send({
-            message: "an error occured: " + JSON.stringify(err),
-          });
-        } else if (otpData) {
-          otpData = otpData[otpData.length - 1];
-
-          const now = new Date().getTime();
-          const otpIat = new Date(otpData.createdOn).getTime(); // 2021-01-06T13:08:33.657+0000
-          const diff = now - otpIat; // 300000 5 minute
-
-          if (otpData.otp === req.body.otp && diff < 300000) {
-            // correct otp code
-            otpData.remove();
-            bcrypt.stringToHash(req.body.newPassword).then(function (hash) {
-              user.update({ password: hash }, {}, function (err, data) {
-                res.status(200).send({
-                  message: "password updated",
-                });
-              });
-            });
-          } else {
-            res.status(401).send({
-              message: "incorrect otp",
-            });
-          }
-        } else {
-          res.status(401).send({
-            message: "incorrect otp",
-          });
-        }
-      });
-    } else {
-      res.status(403).send({
-        message: "user not found",
       });
     }
   });

@@ -33,12 +33,6 @@ const userSchema = new mongoose.Schema({
   profilePicture: String,
 });
 
-const otpSchema = new mongoose.Schema({
-  email: String,
-  otp: String,
-  createdOn: { type: Date, default: Date.now },
-});
-
 const complainSchema = mongoose.Schema({
   email: String,
 
@@ -57,21 +51,12 @@ const complainSchema = mongoose.Schema({
   createdOn: { type: Date, default: Date.now },
 });
 
-const organizationSchema = mongoose.Schema({
-  name: String,
-  location: String,
-  image: String,
-});
-
 const userModel = mongoose.model("user", userSchema);
-const otpModel = mongoose.model("otp", otpSchema);
+
 const complainModel = mongoose.model("complain", complainSchema);
-const organizationModel = mongoose.model("organization", organizationSchema);
 
 module.exports = {
   userModel,
-  //   otpModel,
+
   complainModel,
-  // organizationModel,
 };
-// todo otp model organization model delete

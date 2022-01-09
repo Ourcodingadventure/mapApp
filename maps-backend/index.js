@@ -9,11 +9,7 @@ const jwt = require("jsonwebtoken");
 var authController = require("./routes/auth-controller");
 const path = require("path");
 const bcrypt = require("bcrypt-inzi");
-const {
-  userModel,
-  complainModel,
-  organizationModel,
-} = require("./model/index");
+const { userModel, complainModel } = require("./model/index");
 
 const multer = require("multer");
 
@@ -118,59 +114,6 @@ app.get("/profile", (req, res, next) => {
   );
 });
 
-app.post("/register-organization", (req, res) => {
-  if (!req.body.name || !req.body.location) {
-    return res.send(`
-        please send following in JSON body
-        e.g
-        {
-            "name" : "organization-name",
-            "location" : "location"
-        }
-        `);
-  }
-  organizationModel.findOne({ name: req.body.name }, (err, organization) => {
-    if (organization) {
-      return res.status(400).send({
-        message: "organization already exists",
-      });
-    } else {
-      organizationModel
-        .create({
-          name: req.body.name,
-          location: req.body.location,
-          image: req.body.image,
-        })
-        .then((organization) => {
-          return res.status(200).send({
-            organization,
-            message: "organization registered succesfully",
-          });
-        })
-        .catch((err) => {
-          return res.status(500).send({
-            message: "an error occurred",
-          });
-        });
-    }
-  });
-});
-
-app.get("/organization", (req, res) => {
-  organizationModel.find({}, (err, organization) => {
-    if (!err) {
-      return res.status(200).send({
-        message: "All organizations feteched",
-        organization,
-      });
-    } else {
-      return res.status(400).send({
-        message: "Error occoured",
-      });
-    }
-  });
-});
-
 app.post("/complain", upload.any(), (req, res, next) => {
   let body = JSON.parse(req.body.dataa);
   userModel.findOne({ email: req.headers.jToken.email }, (err, user) => {
@@ -179,7 +122,7 @@ app.post("/complain", upload.any(), (req, res, next) => {
         .create({
           email: req.headers.jToken.email,
           name: body.anonymous ? "anonymous" : req.headers.jToken.name,
-          //   organizationName: body?.organization,
+
           locationText: body.locationText,
           image: req.files[0]?.filename,
           remarks: body?.message,
