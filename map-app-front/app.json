@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "reporter",
+    "slug": "reporter",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./app/assets/icon.png",
+    "splash": {
+      "image": "./app/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "750855626973-b0f2a705nm9hnc9p5v5sea0vpeh0fm9t.apps.googleusercontent.com",
+          "certificateHash": "8273E414E6D5C3BCB0F3803732B8B08E6F9B9E98"
+        },
+        "googleMaps": {
+          "apiKey": "AIzaSyAdr0NfAkbWoRTjwEIhWiaDxmMie3f2OLg"
+        }
+      },
+      "package": "com.fyp.reporter"
+    },
+    "web": {
+      "favicon": "./app/assets/favicon.png"
+    }
+  }
+}
