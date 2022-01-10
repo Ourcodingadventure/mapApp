@@ -3,47 +3,45 @@ import MapView from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
+import environment from "../config/environment/environment";
 import useLocation from "../hooks/useLocation";
 import AppText from "../components/text/AppText";
+import axios from "axios";
 export default function MyMap({ navigation, route }) {
-  //   let { latitude, longitude, postedBy, organization, status, name } =
-  //     route.params;
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { location, fetching } = useLocation();
-  console.log("in my map", location);
-  console.log("in my map", useLocation());
+
   const getFeedComplains = async () => {
     if (firstCall) {
+      console.log("hi");
       setLoading(true);
       setFirstCall(false);
     }
     try {
+      console.log("hi in try");
       let data = await axios.get(`${environment.baseUrl}/all-complains`);
+
       setFeed(data.data.complain.reverse());
     } catch (err) {
     } finally {
       setLoading(false);
     }
   };
-  console.log("loading", loading);
+
   useEffect(() => {
     getFeedComplains();
-    socket.on(
-      "complain",
-      () => {
-        setChange(!change);
-      },
-      []
-    );
+    socket.on("complain", () => {
+      setChange(!change);
+    });
 
     return () => {
       socket.off("complain");
     };
-  }, [change]);
+  }, []);
   //todo
   return (
     <View style={styles.container}>
@@ -59,14 +57,20 @@ export default function MyMap({ navigation, route }) {
           }}
           showsUserLocation={true}
         >
-          {/* <Marker
-           coordinate={{
-             latitude,
-             longitude,
-           }}
-           title={organization}
-           description={status}
-         /> */}
+          {console.log(feed)}
+
+          {feed.map((mark) => {
+            return (
+              <Marker
+                coordinate={{
+                  latitude: mark.latitude,
+                  longitude: mark.longitude,
+                }}
+                title={mark.issueName}
+                description={mark.remarks}
+              />
+            );
+          })}
         </MapView>
       )}
     </View>
