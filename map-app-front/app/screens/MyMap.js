@@ -32,9 +32,13 @@ export default function MyMap({ navigation, route }) {
   console.log("loading", loading);
   useEffect(() => {
     getFeedComplains();
-    socket.on("complain", () => {
-      setChange(!change);
-    });
+    socket.on(
+      "complain",
+      () => {
+        setChange(!change);
+      },
+      []
+    );
 
     return () => {
       socket.off("complain");
