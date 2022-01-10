@@ -14,7 +14,7 @@ export default useLocation = () => {
       } = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Highest,
       });
-      console.log("location", location);
+
       setLocation({ latitude, longitude, altitude });
     } catch (error) {
       console.log("error", error);
@@ -23,10 +23,11 @@ export default useLocation = () => {
       setFetching(false);
     }
   };
-
+  console.log(fetching);
   useEffect(() => {
     getLocation();
-  }, []);
 
+    return () => getLocation();
+  }, []);
   return { location, fetching };
 };

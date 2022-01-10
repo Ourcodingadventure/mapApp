@@ -14,7 +14,8 @@ export default function MyMap({ navigation, route }) {
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { location, fetching } = useLocation();
-  console.log(location);
+  console.log("in my map", location);
+  console.log("in my map", useLocation());
   const getFeedComplains = async () => {
     if (firstCall) {
       setLoading(true);
@@ -43,7 +44,7 @@ export default function MyMap({ navigation, route }) {
   return (
     <View style={styles.container}>
       <AppText>Loading</AppText>
-      {!fetching && (
+      {location && (
         <MapView
           style={styles.map}
           region={{
