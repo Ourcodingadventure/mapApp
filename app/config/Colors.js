@@ -10,4 +10,5 @@ export default {
     semiTransparentWhite: "rgba(255,255,255, 0.8)",
     transparentWhite: "rgba(255,255,255, 0.6)",
     barelySeenWhite: "rgba(255,255,255, 0.3)",
+    pink: "rgb(254,40,105)"
 }

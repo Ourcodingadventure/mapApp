@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ComplainButton from "../../components/ComplainButton";
 import ProfileNavigation from "../profile-navigation/ProfileNavigation";
 import PostNavigation from "../post-navigation.js/PostNavigation";
+import WeatherScreen from "../../screens/WeatherScreen"
 
 import MyMap from "../../screens/MyMap";
 
@@ -52,6 +53,18 @@ const AppNavigation = () => {
           tabBarLabel: "Post Complain",
           headerShown: false,
         })}
+      />
+      <Tab.Screen
+        name="Weather"
+        component={WeatherScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="weather-sunny" color={color} size={size} />
+          ),
+          tabBarLabel: "Weather",
+          title: "My Profile",
+          headerShown: false,
+        }}
       />
       <Tab.Screen
         name="Profile"
