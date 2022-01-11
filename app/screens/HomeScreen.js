@@ -80,6 +80,8 @@ export default function HomeScreen({ navigation }) {
                 keyExtractor={keyExtractor}
                 renderItem={({ item }) => {
                     return (<Card
+                        id={item._id}
+                        count={item.likesCount}
                         createdOn={item.createdOn}
                         title={`Organization: ${item.organizationName}`}
                         imageUrl={item.image ? { uri: `${environment.baseUrl}/${item.image}` } : false}

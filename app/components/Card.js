@@ -6,12 +6,16 @@ import Text from "./text/AppText";
 import colors from "../config/Colors";
 import moment from 'moment'
 import { TouchableOpacity } from "react-native-gesture-handler";
-function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Map, createdOn, secTitle }) {
+import axios from "axios";
+import environment from '../config/environment/environment';
+
+function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Map, createdOn, secTitle, id, count }) {
     const [isLiked, setIsLiked] = useState(false)
     const [isDisliked, setIsDisliked] = useState(false)
     const [likesCount, setLikesCount] = useState(0)
 
-    const handleLike = () => {
+    useEffect(()=>{setLikesCount(count)},[count])
+    const handleLike = async () => {
         try {
             if (!isLiked) {
                 setLikesCount(prev=>prev+1)
@@ -21,10 +25,11 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
                 setIsLiked(false)
                 !isDisliked ? likesCount!==0 && setLikesCount(prev=>prev-1): setLikesCount(prev=>prev+1)
             }
+            await updateLikes()
         } finally {
         }
     }
-    const handleDislike = () => {
+    const handleDislike = async () => {
         try {
             if (!isLiked) {
                 likesCount>0 && setLikesCount(prev=>prev-1)
@@ -34,10 +39,11 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
                 setIsLiked(false)
                 !isDisliked ?setLikesCount(prev=>prev-1): likesCount!==0 && setLikesCount(prev=>prev+1)
             }
+            await updateLikes()
         } finally {
         }
     }
-
+    const updateLikes = async () => axios.post(`${environment.baseUrl}/update-likes`, {id, likesCount})
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={styles.card}>
