@@ -9,6 +9,9 @@ import Text from "./text/AppText";
 import colors from "../config/Colors";
 import moment from "moment";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
+import environment from "../config/environment/environment";
+
 function Card({
   issueTitle,
   title,
@@ -19,9 +22,50 @@ function Card({
   Map,
   createdOn,
   secTitle,
+  id,
+  count,
 }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
 
+  useEffect(() => {
+    setLikesCount(count);
+  }, [count]);
+  const handleLike = async () => {
+    try {
+      if (!isLiked) {
+        setLikesCount((prev) => prev + 1);
+        setIsLiked(true);
+        setIsDisliked(false);
+      } else {
+        setIsLiked(false);
+        !isDisliked
+          ? likesCount !== 0 && setLikesCount((prev) => prev - 1)
+          : setLikesCount((prev) => prev + 1);
+      }
+      await updateLikes();
+    } finally {
+    }
+  };
+  const handleDislike = async () => {
+    try {
+      if (!isLiked) {
+        likesCount > 0 && setLikesCount((prev) => prev - 1);
+        likesCount > 0 && setIsLiked(true);
+        setIsDisliked(true);
+      } else {
+        setIsLiked(false);
+        !isDisliked
+          ? setLikesCount((prev) => prev - 1)
+          : likesCount !== 0 && setLikesCount((prev) => prev + 1);
+      }
+      await updateLikes();
+    } finally {
+    }
+  };
+  const updateLikes = async () =>
+    axios.post(`${environment.baseUrl}/update-likes`, { id, likesCount });
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
@@ -61,17 +105,14 @@ function Card({
             </Text>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-            <TouchableOpacity
-              style={{ marginRight: 8 }}
-              onPress={() => setLikesCount((prev) => prev + 1)}
-            >
+            <TouchableOpacity style={{ marginRight: 8 }} onPress={handleLike}>
               <View>
                 <Text>
                   Like <Text>{likesCount}</Text>
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setLikesCount((prev) => prev - 1)}>
+            <TouchableOpacity onPress={handleDislike}>
               <View>
                 <Text>Dislike</Text>
               </View>
