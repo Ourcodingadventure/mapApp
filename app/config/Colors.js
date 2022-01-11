@@ -1,5 +1,3 @@
-
-
 export default {
     primary: '#13293E',
     primaryLight: '#05547B',
@@ -8,5 +6,4 @@ export default {
     black: 'black',
     onlineColor: '#4ACD1D',
     light: '#DDD8D8',
-
 }
