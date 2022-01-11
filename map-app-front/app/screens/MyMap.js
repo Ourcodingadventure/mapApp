@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import MapView from "react-native-maps";
-import { View, StyleSheet, Dimensions } from "react-native";
-import { Marker } from "react-native-maps";
-import socket from "../config/socket";
-import useLocation from "../hooks/useLocation";
-import AppText from "../components/text/AppText";
+/** @format */
+
+import React, { useState, useEffect } from 'react';
+import MapView from 'react-native-maps';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { Marker } from 'react-native-maps';
+import socket from '../config/socket';
+import useLocation from '../hooks/useLocation';
+import AppText from '../components/text/AppText';
+import { v4 as uuidv4 } from 'uuid';
 export default function MyMap({ navigation, route }) {
   //   let { latitude, longitude, postedBy, organization, status, name } =
   //     route.params;
@@ -13,9 +16,9 @@ export default function MyMap({ navigation, route }) {
   const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [markerArray, setMarkerArray] = useState([]);
   const { location, fetching } = useLocation();
-  console.log("in my map", location);
-  console.log("in my map", useLocation());
+
   const getFeedComplains = async () => {
     if (firstCall) {
       setLoading(true);
@@ -29,18 +32,26 @@ export default function MyMap({ navigation, route }) {
       setLoading(false);
     }
   };
-  console.log("loading", loading);
+
+  const handleAddMarker = (e) => {
+    const markerCoords = e.nativeEvent.coordinate;
+    const newMarkerArray = [...markerArray];
+    newMarkerArray.push(markerCoords);
+    setMarkerArray(newMarkerArray);
+    console.log('marker', markerArray, markerArray.length);
+  };
+
   useEffect(() => {
     getFeedComplains();
-    socket.on("complain", () => {
+    socket.on('complain', () => {
       setChange(!change);
     });
 
     return () => {
-      socket.off("complain");
+      socket.off('complain');
     };
   }, [change]);
-  //todo
+
   return (
     <View style={styles.container}>
       <AppText>Loading</AppText>
@@ -54,15 +65,16 @@ export default function MyMap({ navigation, route }) {
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
+          onPress={(e) => handleAddMarker(e)}
         >
-          {/* <Marker
-           coordinate={{
-             latitude,
-             longitude,
-           }}
-           title={organization}
-           description={status}
-         /> */}
+          {markerArray.map((marker) => (
+            <Marker
+              key={Math.random()}
+              coordinate={marker}
+              //  title={organization}
+              //  description={status}
+            />
+          ))}
         </MapView>
       )}
     </View>
@@ -71,13 +83,13 @@ export default function MyMap({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
