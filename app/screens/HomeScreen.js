@@ -13,6 +13,8 @@ import MapView from 'react-native-maps';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import socket from '../config/socket'
 import ActivityIndicator from '../components/ActivityIndicator'
+import useLocation from '../hooks/useLocation'
+import haversine from 'haversine'
 
 
 export default function HomeScreen({ navigation }) {
@@ -21,6 +23,7 @@ export default function HomeScreen({ navigation }) {
     const [change, setChange] = useState(false);
     const [firstCall, setFirstCall] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const {location} = useLocation();
     const wait = timeout => {
         return new Promise(resolve => {
             setTimeout(resolve, timeout);
@@ -42,7 +45,7 @@ export default function HomeScreen({ navigation }) {
         }
         try {
             let data = await axios.get(`${environment.baseUrl}/all-complains`);
-            setFeed(data.data.complain.reverse());
+            setFeed(data.data.complain.reverse().filter(complain=>calculateDistance(complain)));
         } catch (err) {
 
         } finally {
@@ -58,9 +61,15 @@ export default function HomeScreen({ navigation }) {
         return () => {
             socket.off('complain')
         }
-    }, [change])
-
-
+    }, [change, location])
+    
+    const calculateDistance = complain => {
+        const currentLoc = {latitude:location.latitude, longitude:location.longitude}
+        const complainLoc = {latitude:complain.latitude, longitude:complain.longitude}
+        const distance = haversine(currentLoc, complainLoc)
+        return distance < 15 && complain
+    }
+    
     const keyExtractor = useCallback((item, index) => item._id.toString(), [])
     return (
         <Screen style={!loading && feed.length > 0 ? styles.container : [styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
