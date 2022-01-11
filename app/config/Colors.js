@@ -10,7 +10,7 @@ export default {
   purpleTransparent: "rgba(134,103,255, 0.4)",
   semiTransparentWhite: "rgba(255,255,255, 0.8)",
   transparentWhite: "rgba(255,255,255, 0.6)",
-  barelySeenWhite: "rgba(255,255,255, 0.3)",
+  barelySeenWhite: "rgba(255,255,255, 0.2)",
   pink: "rgb(254,40,105)",
   grey: "rgba(0,0,0, 0.1)",
 };
