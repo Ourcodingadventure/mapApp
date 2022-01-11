@@ -99,14 +99,14 @@ function Card({
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <TouchableOpacity onPress={handleDislike}>
               <View style={{ flexDirection: "row" }}>
-                <MaterialCommunityIcons name="heart-broken" color="#4838AD" size={25}/>
+                <MaterialCommunityIcons name="heart-broken" color="rgb(254,40,105)" size={25}/>
                 <Text style={{color: "#4838AD"}}>0 </Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={{ marginRight: 8 }} onPress={handleLike}>
               <View style={{flexDirection: "row"}}>
-                <MaterialCommunityIcons name="heart" color="#4838AD" size={25} />
+                <MaterialCommunityIcons name="heart" color="rgb(254,40,105)" size={25} />
                 <Text style={{color: "#4838AD"}}>{` ${likesCount}`}</Text>
               </View>
             </TouchableOpacity>
