@@ -211,18 +211,18 @@ export default function PostComplainScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: Colors.purpleTransparent,
+    backgroundColor: Colors.white,
     height: "100%",
   },
   container: {
     borderRadius:20,
-    marginTop: 60,
+    // marginTop: 60,
     backgroundColor: Colors.white,
     height: "100%",
   },
   header: {
     color: Colors.black,
-    marginTop: 60,
+    marginTop: 30,
     marginLeft: 30,
     fontSize: 18,
     letterSpacing: 3,
@@ -262,27 +262,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 2,
     fontWeight: "600",
-  },
-  modal: {
-    width: 300,
-    height: 100,
-    margin: 0,
-    // display: "flex",
-    // backgroundColor: Colors.purple,
-    // flex: 1,
-  },
-  icon: {},
-  logoutButton: {
-    textAlign: "center",
-    textAlignVertical: "center",
-    alignSelf: "center",
-    backgroundColor: Colors.pink,
-    borderRadius: 50,
-    height: 50,
-    fontSize: 17,
-    color: Colors.white,
-    width: "85%",
-    position: "absolute",
-    bottom: 20,
   },
 });
