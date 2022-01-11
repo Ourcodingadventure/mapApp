@@ -143,6 +143,7 @@ export default function HomeScreen({ navigation }) {
               return (
                 <Card
                   id={item._id}
+                  remarks={item.remarks}
                   count={item.likesCount}
                   createdOn={item.createdOn}
                   imageUrl={
@@ -150,7 +151,7 @@ export default function HomeScreen({ navigation }) {
                       ? { uri: `${environment.baseUrl}/${item.image}` }
                       : false
                   }
-                  subTitle={`Posted by: ${item.name}`}
+                  subTitle={`By: ${item.name}`}
                   secTitle={`Status: ${item.status}`}
                   issueTitle={item.issueName}
                   Map={
@@ -201,7 +202,7 @@ export default function HomeScreen({ navigation }) {
       )}
       {!loading && !feed.length && (
         <View style={{ justifyContent: "center" }}>
-          <Text>No complains :)</Text>
+          <Text style={{color: "white"}}>No complains :)</Text>
         </View>
       )}
     </Screen>
@@ -213,9 +214,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.purple,
   },
   map: {
-    width: "80%",
-    height: 70,
-    alignSelf: "center",
+    borderRadius:30, //not working :(
+    height: 100,
+    marginBottom: 20,
+    marginRight: 30,
+    marginLeft: 30,    
   },
   header: {
     color: Colors.white,
@@ -247,39 +250,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  email: {
-    paddingTop: 3,
-    marginLeft: 20,
-    color: Colors.white,
-    fontSize: 15,
-    letterSpacing: 2,
-  },
-  password: {
-    paddingTop: 9,
-    marginLeft: 20,
-    color: Colors.white,
-    fontSize: 12,
-    letterSpacing: 2,
-    fontWeight: "600",
-  },
-  modal: {
-    display: "flex",
-    backgroundColor: Colors.purple,
-    flex: 1,
-  },
-  icon: {},
-  logoutButton: {
-    textAlign: "center",
-    textAlignVertical: "center",
-    alignSelf: "center",
-    backgroundColor: Colors.pink,
-    borderRadius: 50,
-    height: 50,
-    fontSize: 17,
-    color: Colors.white,
-    width: "85%",
-    position: "absolute",
-    bottom: 20,
   },
 });
