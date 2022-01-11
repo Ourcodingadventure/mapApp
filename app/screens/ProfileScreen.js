@@ -36,8 +36,6 @@ const validationSchema = Yup.object().shape({
 
 });
 
-
-
 export default function ProfileScreen({ navigation }) {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -46,7 +44,6 @@ export default function ProfileScreen({ navigation }) {
     const [error, setError] = useState(false);
     // const globalStateUpdate = useGlobalStateUpdate();
     // const [spinner, setSpinner] = useState(false);
-
 
     const userInfo = [
         {
@@ -65,8 +62,6 @@ export default function ProfileScreen({ navigation }) {
 
         },
     ];
-
-
 
     const handleSubmit = async ({ password, newPassword }) => {
         setLoading(true)
@@ -101,12 +96,10 @@ export default function ProfileScreen({ navigation }) {
         }
     }
 
-
-
     return (
-
         <View style={styles.container} >
-            <FlatList
+            <H3 style={styles.header}>PROFILE</H3>
+            {/* <FlatList
                 style={{ marginBottom: 20 }}
                 data={userInfo}
                 keyExtractor={(userInfo) => userInfo.title}
@@ -191,21 +184,23 @@ export default function ProfileScreen({ navigation }) {
                     </Form>
 
                 </Screen>
-            </Modal>
-
-
+            </Modal> */}
         </View>
-
     )
-
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
+        backgroundColor: Colors.purple,
+        height: '100%',
+        padding: 30,
     },
-    screen: {
-        backgroundColor: 'gray',
+    header: {
+        color: Colors.white,
+        marginTop: 30,
+        fontSize: 20,
+        letterSpacing: 3,
+        fontWeight: "700",
     },
 
     modal: {
@@ -214,6 +209,4 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 8,
     },
-
-
 });

@@ -12,7 +12,7 @@ const ProfileNavigation = () => {
         <Stack.Navigator>
             <Stack.Screen name='MyProfile' component={ProfileScreen}
                 options={{
-                    title: 'My Profile',
+                    headerShown: false,
                 }}
             />
 
