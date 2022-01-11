@@ -18,12 +18,10 @@ export default function MyMap({ navigation, route }) {
 
   const getFeedComplains = async () => {
     if (firstCall) {
-      console.log("hi");
       setLoading(true);
       setFirstCall(false);
     }
     try {
-      console.log("hi in try");
       let data = await axios.get(`${environment.baseUrl}/all-complains`);
 
       setFeed(data.data.complain.reverse());
