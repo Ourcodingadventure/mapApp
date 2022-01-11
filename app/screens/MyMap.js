@@ -110,7 +110,7 @@ export default function MyMap({ navigation }) {
           ]}
           onPress={(e) => handleAddMarker(e)}
         >
-          <Polyline coordinates={route} strokeWidth={5} />
+          {track && <Polyline coordinates={route} strokeWidth={5} />}{" "}
           {feed.map((mark) => {
             return (
               <Marker

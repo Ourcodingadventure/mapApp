@@ -28,7 +28,7 @@ function Card({
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
-
+  console.log("count", count);
   useEffect(() => {
     setLikesCount(count);
   }, [count]);
@@ -85,9 +85,6 @@ function Card({
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
             {secTitle && (
               <Text style={styles.title} numberOfLines={1}>
                 {secTitle}
