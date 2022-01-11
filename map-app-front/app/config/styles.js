@@ -26,17 +26,17 @@ const authStyle = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
-    headerContainer: {
-        marginHorizontal: 10,
-        backgroundColor: colors.primary,
-    },
-    headerText: {
-        fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
-        marginTop: 35,
-        color: 'white',
-    },
+    // headerContainer: {
+    //     marginHorizontal: 10,
+    //     backgroundColor: colors.primary,
+    // },
+    // headerText: {
+    //     fontWeight: 'bold',
+    //     color: '#333',
+    //     textAlign: 'center',
+    //     marginTop: 35,
+    //     color: 'white',
+    // },
     text: {
         color: colors.primary,
         fontSize: 14,
@@ -61,6 +61,11 @@ const authStyle = StyleSheet.create({
 
     },
     btnLabelText: { color: colors.primary, fontWeight: "600" },
+    image: {
+        flex: 1,
+        justifyContent: "center"
+    },
+
 })
 
 export {
