@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+/** @format */
 
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   View,
   ActivityIndicator,
   ScrollView,
   FlatList,
   StyleSheet,
-  Modal,
 } from "react-native";
 import AppText from "../components/text/AppText";
 import H3 from "../components/text/H2";
@@ -22,6 +22,7 @@ import ImageInput from "../components/ImageInput";
 import Camera from "../components/Camera";
 import useLocation from "../hooks/useLocation";
 import Screen from "../components/Screen";
+import AuthContext from "../Context/AuthContext";
 
 export default function PostComplainScreen({ navigation }) {
   const [error, setError] = useState(false);
@@ -44,6 +45,7 @@ export default function PostComplainScreen({ navigation }) {
     { name: "Violent Animals", id: 7 },
   ]);
   const { location, fetching } = useLocation();
+  const { coords, setCoords, change, setChange } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     let localUri;
@@ -51,16 +53,30 @@ export default function PostComplainScreen({ navigation }) {
     let match;
     let type;
     let photo;
+    let mandatoryData;
     var form = new FormData();
-    let mendatoryData = {
-      latitude: location ? location.latitude : null,
-      longitude: location ? location.longitude : null,
-      altitude: location ? location.altitude : null,
-      message: message,
-      category: selectedItem,
-      locationText: locationText,
-      anonymous,
-    };
+    {
+      coords
+        ? (mandatoryData = {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            altitude: null,
+            message: message,
+            category: selectedItem,
+            locationText: locationText,
+            anonymous,
+          })
+        : (mandatoryData = {
+            latitude: location ? location.latitude : null,
+            longitude: location ? location.longitude : null,
+            altitude: location ? location.altitude : null,
+            message: message,
+            category: selectedItem,
+            locationText: locationText,
+            anonymous,
+          });
+    }
+
     if (imageUri) {
       localUri = imageUri.uri;
       filename = localUri.split("/").pop();
@@ -70,11 +86,11 @@ export default function PostComplainScreen({ navigation }) {
         uri: localUri,
         type,
         name: filename,
-        ...mendatoryData,
+        ...mandatoryData,
       };
       form.append("complain-photo", photo);
     }
-    form.append("dataa", JSON.stringify(mendatoryData));
+    form.append("dataa", JSON.stringify(mandatoryData));
 
     setLoading(true);
     fetch(environment.baseUrl + "/complain", {
@@ -96,7 +112,7 @@ export default function PostComplainScreen({ navigation }) {
         setAnonymous(false);
         setGallery(false);
         setSelectedOrganization(false);
-
+        setChange(!change);
         alert("Your complain has been placed successfully", responseData);
       });
   };

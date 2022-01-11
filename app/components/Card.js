@@ -1,11 +1,43 @@
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import {
     View, StyleSheet, TouchableWithoutFeedback, Image,
 } from "react-native";
 import Text from "./text/AppText";
 import colors from "../config/Colors";
 import moment from 'moment'
+import { TouchableOpacity } from "react-native-gesture-handler";
 function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Map, createdOn, secTitle }) {
+    const [isLiked, setIsLiked] = useState(false)
+    const [isDisliked, setIsDisliked] = useState(false)
+    const [likesCount, setLikesCount] = useState(0)
+
+    const handleLike = () => {
+        try {
+            if (!isLiked) {
+                setLikesCount(prev=>prev+1)
+                setIsLiked(true)
+                setIsDisliked(false)   
+            } else {
+                setIsLiked(false)
+                !isDisliked ? likesCount!==0 && setLikesCount(prev=>prev-1): setLikesCount(prev=>prev+1)
+            }
+        } finally {
+        }
+    }
+    const handleDislike = () => {
+        try {
+            if (!isLiked) {
+                likesCount>0 && setLikesCount(prev=>prev-1)
+                likesCount>0 && setIsLiked(true)
+                setIsDisliked(true)   
+            } else {
+                setIsLiked(false)
+                !isDisliked ?setLikesCount(prev=>prev-1): likesCount!==0 && setLikesCount(prev=>prev+1)
+            }
+        } finally {
+        }
+    }
+
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={styles.card}>
@@ -35,10 +67,14 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
                             {moment(createdOn).fromNow()}
                         </Text>
                     </View>
-
-                </View>
-                <View>
-
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <TouchableOpacity style={{marginRight:8}} onPress={handleLike}>
+                            <View><Text>Like <Text>{likesCount}</Text></Text></View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleDislike}>
+                            <View><Text>Dislike</Text></View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </TouchableWithoutFeedback>

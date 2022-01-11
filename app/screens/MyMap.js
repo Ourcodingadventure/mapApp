@@ -24,16 +24,24 @@ import {
 } from "react-native-gesture-handler";
 Location.installWebGeolocationPolyfill();
 
-export default function MyMap() {
+import React, { useState, useEffect, useContext } from "react";
+import MapView from "react-native-maps";
+import { View, StyleSheet, Dimensions, Text, TextInput } from "react-native";
+import { Marker, Callout } from "react-native-maps";
+import socket from "../config/socket";
+import environment from "../config/environment/environment";
+import useLocation from "../hooks/useLocation";
+import AppText from "../components/text/AppText";
+import AuthContext from "../Context/AuthContext";
+import axios from "axios";
+export default function MyMap({ navigation, route }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [markerArray, setMarkerArray] = useState([]);
+
   const [route, setRoute] = useState([]);
-  const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
+  const { coords, setCoords, change, setChange } = useContext(AuthContext);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -58,7 +66,6 @@ export default function MyMap() {
     }
     try {
       let data = await axios.get(`${environment.baseUrl}/all-complains`);
-
       setFeed(data.data.complain.reverse());
     } catch (err) {
     } finally {
@@ -66,24 +73,22 @@ export default function MyMap() {
     }
   };
 
-  const handleAddMarker = (e) => {
-    const markerCoords = e.nativeEvent.coordinate;
-    const newMarkerArray = [...markerArray];
-    newMarkerArray.push(markerCoords);
-    setMarkerArray(newMarkerArray);
-    console.log("marker", markerArray, markerArray.length);
-  };
   useEffect(() => {
     getFeedComplains();
     socket.on("complain", () => {
       setChange(!change);
     });
-
     return () => {
       socket.off("complain");
     };
-  }, [change]);
-  //todo
+  }, []);
+
+  const handleAddMarker = (e) => {
+    const markerCoords = e.nativeEvent.coordinate;
+    setCoords(markerCoords);
+    navigation.navigate("PostComplainTab");
+  };
+
   return (
     <View style={styles.container}>
       <AppText>Loading</AppText>
@@ -97,25 +102,8 @@ export default function MyMap() {
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
-          followUserLocation={true}
-          overlays={[
-            {
-              coordinates: route,
-              strokeColor: "#19B5FE",
-              lineWidth: 1000,
-            },
-          ]}
-          onPress={(e) => handleAddMarker(e)}
+          onPress={handleAddMarker}
         >
-          <Polyline coordinates={route} strokeWidth={5} />
-          {markerArray.map((marker) => (
-            <Marker
-              key={Math.random()}
-              coordinate={marker}
-              //  title={organization}
-              //  description={status}
-            />
-          ))}
           {feed.map((mark) => {
             return (
               <Marker
@@ -151,6 +139,7 @@ export default function MyMap() {
 }
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
