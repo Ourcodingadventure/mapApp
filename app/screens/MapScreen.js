@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MapView from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Marker } from "react-native-maps";
+import ComplainButton from "../components/ComplainButton";
 
 export default function MapScreen({ navigation, route }) {
   let { latitude, longitude, postedBy, organization, status, name } =
@@ -27,6 +28,7 @@ export default function MapScreen({ navigation, route }) {
           title={organization}
           description={status}
         />
+        <ComplainButton />
       </MapView>
     </View>
   );

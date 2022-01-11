@@ -1,13 +1,11 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import Colors from "../config/Colors";
 
-function ComplainButton({ onPress, style }) {
+function PostButton({ onPress, style, source, onTouchEnd }) {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={[styles.container, style]}>
-        <Text style={styles.plus}>+</Text>
-      </View>
+    <TouchableOpacity onTouchEnd={onTouchEnd} onPress={onPress}>
+      <Image style={style} source={source} />
     </TouchableOpacity>
   );
 }
@@ -30,4 +28,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComplainButton;
+export default PostButton;

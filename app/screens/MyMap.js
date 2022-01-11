@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MapView, { Polyline } from "react-native-maps";
+import React, { useState, useEffect, useContext } from "react";
+import MapView, { Polyline, Marker } from "react-native-maps";
 
 import {
   View,
@@ -9,7 +9,6 @@ import {
   Button,
   ImageBackground,
 } from "react-native";
-import { Marker } from "react-native-maps";
 import socket from "../config/socket";
 import environment from "../config/environment/environment";
 import useLocation from "../hooks/useLocation";
@@ -23,32 +22,39 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native-gesture-handler";
+import ComplainButton from "../components/ComplainButton";
+import PostButton from "../components/PostButton";
 Location.installWebGeolocationPolyfill();
 
-export default function MyMap() {
+export default function MyMap({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [change, setChange] = useState(false);
+  // const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
   const { coords, setCoords, change, setChange } = useContext(AuthContext);
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {},
-      (error) => alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-    const watchID = navigator.geolocation.watchPosition((position) => {
-      const positionLatLngs = pick(position.coords, ["latitude", "longitude"]);
+    if (track) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {},
+        (error) => alert(error.message),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+      const watchID = navigator.geolocation.watchPosition((position) => {
+        const positionLatLngs = pick(position.coords, [
+          "latitude",
+          "longitude",
+        ]);
 
-      setRoute((prev) => [...prev, positionLatLngs]);
-    });
+        setRoute((prev) => [...prev, positionLatLngs]);
+      });
+    }
     return () => {
       navigator.geolocation.clearWatch(watchID);
     };
-  }, []);
+  }, [track]);
   console.log("route", route);
   const getFeedComplains = async () => {
     if (firstCall) {
@@ -81,7 +87,7 @@ export default function MyMap() {
   }, [change]);
   //todo
   return (
-    <View style={styles.container}>
+    <View style={StyleSheet.absoluteFillObject}>
       <AppText>Loading</AppText>
       {location && (
         <MapView
@@ -92,6 +98,7 @@ export default function MyMap() {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
+          // onRegionChange={}
           showsUserLocation={true}
           followUserLocation={true}
           overlays={[
@@ -104,7 +111,6 @@ export default function MyMap() {
           onPress={(e) => handleAddMarker(e)}
         >
           <Polyline coordinates={route} strokeWidth={5} />
-
           {feed.map((mark) => {
             return (
               <Marker
@@ -120,21 +126,38 @@ export default function MyMap() {
           })}
         </MapView>
       )}
-      {/* start tracing */}
 
-      {/* show these 2 while tracing */}
-
-      {/* <Image
-        style={styles.iconStop}
-        source={require("../assets/icons/stop-button.png")}
-      /> */}
-
-      {/* stop tracing */}
-
-      {/* <Image
-        style={styles.iconSave}
-        source={require("../assets/icons/save-location-button.png")}
-      /> */}
+      {!track ? (
+        <PostButton
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+          }}
+          style={styles.iconGo}
+          source={require("../assets/icons/go-button.png")}
+          onPress={() => setTrack(true)}
+        />
+      ) : (
+        <>
+          <React.Fragment>
+            <PostButton
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
+              style={styles.iconStop}
+              source={require("../assets/icons/stop-button.png")}
+              onPress={() => setTrack(false)}
+            />
+            <PostButton
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
+              style={styles.iconSave}
+              source={require("../assets/icons/save-location-button.png")}
+              onPress={(e) => handleAddMarker(e)}
+            />
+          </React.Fragment>
+        </>
+      )}
     </View>
   );
 }
@@ -147,13 +170,16 @@ const styles = StyleSheet.create({
 
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    flex: 1,
+    // height: Dimensions.get("window").height,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   iconGo: {
     position: "absolute",
     bottom: 50,
     right: 40,
-    zIndex: 9999,
+    zIndex: 9999999,
   },
   iconStop: {
     position: "absolute",
