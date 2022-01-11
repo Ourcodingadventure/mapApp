@@ -36,21 +36,17 @@ export default function MyMap({ navigation }) {
   const { location, fetching } = useLocation();
   const { coords, setCoords, change, setChange } = useContext(AuthContext);
   useEffect(() => {
-    if (track) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {},
-        (error) => alert(error.message),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
-      const watchID = navigator.geolocation.watchPosition((position) => {
-        const positionLatLngs = pick(position.coords, [
-          "latitude",
-          "longitude",
-        ]);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {},
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    const watchID = navigator.geolocation.watchPosition((position) => {
+      const positionLatLngs = pick(position.coords, ["latitude", "longitude"]);
 
-        setRoute((prev) => [...prev, positionLatLngs]);
-      });
-    }
+      setRoute((prev) => [...prev, positionLatLngs]);
+    });
+
     return () => {
       navigator.geolocation.clearWatch(watchID);
     };
@@ -110,7 +106,7 @@ export default function MyMap({ navigation }) {
           ]}
           onPress={(e) => handleAddMarker(e)}
         >
-          {track && <Polyline coordinates={route} strokeWidth={5} />}{" "}
+          {track && <Polyline coordinates={route} strokeWidth={5} />}
           {feed.map((mark) => {
             return (
               <Marker

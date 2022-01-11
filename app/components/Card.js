@@ -22,6 +22,7 @@ function Card({
   Map,
   createdOn,
   secTitle,
+  remarks,
   id,
   count,
 }) {
@@ -88,6 +89,13 @@ function Card({
             {secTitle && (
               <Text style={styles.title} numberOfLines={1}>
                 {secTitle}
+              </Text>
+            )}
+          </View>
+          <View style={{}}>
+            {remarks && (
+              <Text style={styles.title} numberOfLines={1}>
+                {remarks}
               </Text>
             )}
           </View>

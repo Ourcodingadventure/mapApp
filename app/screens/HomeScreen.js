@@ -80,27 +80,38 @@ export default function HomeScreen({ navigation }) {
   };
 
   useEffect(() => {
-    const months = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
     const date = new Date();
-    const day = date.getDate()
-    const month = months[date.getMonth()]
-    const year = date.getFullYear()
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
 
     let selector;
     if (day <= 0) {
-        selector = 4;
+      selector = 4;
     } else if ((day > 3 && day < 21) || day % 10 > 3) {
-        selector = 0;
+      selector = 0;
     } else {
-        selector = day % 10;
+      selector = day % 10;
     }
 
-    let ordinal = ['th', 'st', 'nd', 'rd', ''][selector]
-      setCurrentDate(`${month} ${day}${ordinal} ${year}`);
-  }, [])
+    let ordinal = ["th", "st", "nd", "rd", ""][selector];
+    setCurrentDate(`${month} ${day}${ordinal} ${year}`);
+  }, []);
 
   const keyExtractor = useCallback((item, index) => item._id.toString(), []);
   return (
@@ -121,11 +132,15 @@ export default function HomeScreen({ navigation }) {
 
           <View style={styles.dateLocationWrapper}>
             <View style={styles.flexBetween}>
-                <Text style={styles.date}>{currentDate}</Text>
-                <View style={styles.flexStart}>
-                    <MaterialCommunityIcons name="map-marker" color="white" size={25} />
-                    <Text style={styles.date}>15km</Text>
-                </View>
+              <Text style={styles.date}>{currentDate}</Text>
+              <View style={styles.flexStart}>
+                <MaterialCommunityIcons
+                  name="map-marker"
+                  color="white"
+                  size={25}
+                />
+                <Text style={styles.date}>15km</Text>
+              </View>
             </View>
           </View>
 
@@ -150,6 +165,7 @@ export default function HomeScreen({ navigation }) {
                       ? { uri: `${environment.baseUrl}/${item.image}` }
                       : false
                   }
+                  remarks={item.remarks}
                   subTitle={`Posted by: ${item.name}`}
                   secTitle={`Status: ${item.status}`}
                   issueTitle={item.issueName}
@@ -235,7 +251,7 @@ const styles = StyleSheet.create({
   },
   division: {
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     backgroundColor: Colors.barelySeenWhite,
     height: 1,
     width: "100%",
