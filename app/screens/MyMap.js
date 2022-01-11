@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Polyline } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
+import MapView from "react-native-maps";
+import { View, StyleSheet, Dimensions, Image } from "react-native";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
 import environment from "../config/environment/environment";
@@ -117,6 +119,25 @@ export default function MyMap() {
           })}
         </MapView>
       )}
+      {/* start tracing */}
+      <Image
+        style={styles.iconGo}
+        source={require("../assets/icons/go-button.png")}
+      />
+
+      {/* show these 2 while tracing */}
+
+      {/* <Image
+        style={styles.iconStop}
+        source={require("../assets/icons/stop-button.png")}
+      /> */}
+
+      {/* stop tracing */}
+
+      {/* <Image
+        style={styles.iconSave}
+        source={require("../assets/icons/save-location-button.png")}
+      /> */}
     </View>
   );
 }
@@ -130,6 +151,21 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  },
+  iconGo: {
+    position: "absolute",
+    bottom: 50,
+    right: 40,
+  },
+  iconStop: {
+    position: "absolute",
+    bottom: 50,
+    right: 40,
+  },
+  iconSave: {
+    position: "absolute",
+    bottom: 140,
+    right: 40,
   },
 });
 
