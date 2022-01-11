@@ -1,55 +1,54 @@
-import React, { useState, useEffect } from "react";
-import MapView from "react-native-maps";
-import { View, StyleSheet, Dimensions } from "react-native";
-import { Marker } from "react-native-maps";
-import socket from "../config/socket";
-import environment from "../config/environment/environment";
-import useLocation from "../hooks/useLocation";
-import AppText from "../components/text/AppText";
-import axios from "axios";
+/** @format */
+
+import React, { useState, useEffect, useContext } from 'react';
+import MapView from 'react-native-maps';
+import { View, StyleSheet, Dimensions, Text, TextInput } from 'react-native';
+import { Marker, Callout } from 'react-native-maps';
+import socket from '../config/socket';
+import environment from '../config/environment/environment';
+import useLocation from '../hooks/useLocation';
+import AppText from '../components/text/AppText';
+import AuthContext from '../Context/AuthContext';
+import axios from 'axios';
 export default function MyMap({ navigation, route }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [markerArray, setMarkerArray] = useState([]);
   const { location, fetching } = useLocation();
+  const [openComment, setOpenComment] = useState(false);
+  const { coords, setCoords, change, setChange } = useContext(AuthContext);
 
   const getFeedComplains = async () => {
     if (firstCall) {
-      console.log("hi");
       setLoading(true);
       setFirstCall(false);
     }
     try {
-      console.log("hi in try");
       let data = await axios.get(`${environment.baseUrl}/all-complains`);
-
       setFeed(data.data.complain.reverse());
     } catch (err) {
     } finally {
       setLoading(false);
     }
   };
-  const handleAddMarker = (e) => {
-    const markerCoords = e.nativeEvent.coordinate;
-    const newMarkerArray = [...markerArray];
-    newMarkerArray.push(markerCoords);
-    setMarkerArray(newMarkerArray);
-    console.log("marker", markerArray, markerArray.length);
-  };
+
   useEffect(() => {
     getFeedComplains();
-    socket.on("complain", () => {
+    socket.on('complain', () => {
       setChange(!change);
     });
-
     return () => {
-      socket.off("complain");
+      socket.off('complain');
     };
   }, []);
-  //todo
+
+  const handleAddMarker = (e) => {
+    const markerCoords = e.nativeEvent.coordinate;
+    setCoords(markerCoords);
+    navigation.navigate('PostComplainTab');
+  };
+
   return (
     <View style={styles.container}>
       <AppText>Loading</AppText>
@@ -63,16 +62,8 @@ export default function MyMap({ navigation, route }) {
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
-          onPress={(e) => handleAddMarker(e)}
+          onPress={handleAddMarker}
         >
-          {markerArray.map((marker) => (
-            <Marker
-              key={Math.random()}
-              coordinate={marker}
-              //  title={organization}
-              //  description={status}
-            />
-          ))}
           {feed.map((mark) => {
             return (
               <Marker
@@ -94,13 +85,13 @@ export default function MyMap({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
@@ -109,7 +100,6 @@ function regionFrom(lat, lon, distance) {
   const circumference = 40075;
   const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
   const angularDistance = distance / circumference;
-
   const latitudeDelta = distance / oneDegreeOfLatitudeInMeters;
   const longitudeDelta = Math.abs(
     Math.atan2(

@@ -1,50 +1,44 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
-import AppText from "../components/text/AppText";
-import H3 from "../components/text/H2";
-import { authStyle } from "../config/styles";
-import axios from "axios";
-import environment from "../config/environment/environment";
-import ErrorMessage from "../components/form/ErrorMessage";
-import Colors from "../config/Colors";
-import Picker from "../components/Picker";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import ImageInput from "../components/ImageInput";
-import Camera from "../components/Camera";
-import useLocation from "../hooks/useLocation";
-import Screen from "../components/Screen";
+/** @format */
+
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { View, ActivityIndicator, ScrollView, FlatList } from 'react-native';
+import AppText from '../components/text/AppText';
+import H3 from '../components/text/H2';
+import { authStyle } from '../config/styles';
+import axios from 'axios';
+import environment from '../config/environment/environment';
+import ErrorMessage from '../components/form/ErrorMessage';
+import Colors from '../config/Colors';
+import Picker from '../components/Picker';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import ImageInput from '../components/ImageInput';
+import Camera from '../components/Camera';
+import useLocation from '../hooks/useLocation';
+import Screen from '../components/Screen';
+import AuthContext from '../Context/AuthContext';
 
 export default function PostComplainScreen({ navigation }) {
   const [error, setError] = useState(false);
-  // const [organization, setOrganization] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState('');
   const [imageUri, onChangeImage] = useState(false);
-  const [locationText, setLocationText] = useState("");
-  const [message, setMessage] = useState("");
+  const [locationText, setLocationText] = useState('');
+  const [message, setMessage] = useState('');
   const [anonymous, setAnonymous] = useState(false);
   const [gallery, setGallery] = useState(false);
   const [category, setCategory] = useState([
-    { name: "Patholes Issue", id: 1 },
-    { name: "Pavement Issue", id: 2 },
-    { name: "Sewerage Issue", id: 3 },
-    { name: "Garbage Issue", id: 4 },
-    { name: "Street Light Outage Issue", id: 5 },
-    { name: "Illegal Parking Issue", id: 6 },
-    { name: "Violent Animals Issue", id: 7 },
+    { name: 'Patholes Issue', id: 1 },
+    { name: 'Pavement Issue', id: 2 },
+    { name: 'Sewerage Issue', id: 3 },
+    { name: 'Garbage Issue', id: 4 },
+    { name: 'Street Light Outage Issue', id: 5 },
+    { name: 'Illegal Parking Issue', id: 6 },
+    { name: 'Violent Animals Issue', id: 7 },
   ]);
   const { location, fetching } = useLocation();
-
-  const getOrganization = async () => {
-    let data = await axios.get(`${environment.baseUrl}/organization`);
-    setOrganization(data.data.organization);
-  };
-
-  useEffect(() => {
-    getOrganization();
-  }, []);
+  const { coords, setCoords, change, setChange } = useContext(AuthContext);
 
   const handleSubmit = async () => {
     let localUri;
@@ -52,37 +46,51 @@ export default function PostComplainScreen({ navigation }) {
     let match;
     let type;
     let photo;
+    let mandatoryData;
     var form = new FormData();
-    let mendatoryData = {
-      latitude: location ? location.latitude : null,
-      longitude: location ? location.longitude : null,
-      altitude: location ? location.altitude : null,
-      message: message,
-      category: selectedItem,
-      locationText: locationText,
-      anonymous,
-    };
+    {
+      coords
+        ? (mandatoryData = {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            altitude: null,
+            message: message,
+            category: selectedItem,
+            locationText: locationText,
+            anonymous,
+          })
+        : (mandatoryData = {
+            latitude: location ? location.latitude : null,
+            longitude: location ? location.longitude : null,
+            altitude: location ? location.altitude : null,
+            message: message,
+            category: selectedItem,
+            locationText: locationText,
+            anonymous,
+          });
+    }
+
     if (imageUri) {
       localUri = imageUri.uri;
-      filename = localUri.split("/").pop();
+      filename = localUri.split('/').pop();
       match = /\.(\w+)$/.exec(filename);
       type = match ? `image/${match[1]}` : `image`;
       photo = {
         uri: localUri,
         type,
         name: filename,
-        ...mendatoryData,
+        ...mandatoryData,
       };
-      form.append("complain-photo", photo);
+      form.append('complain-photo', photo);
     }
-    form.append("dataa", JSON.stringify(mendatoryData));
+    form.append('dataa', JSON.stringify(mandatoryData));
 
     setLoading(true);
-    fetch(environment.baseUrl + "/complain", {
+    fetch(environment.baseUrl + '/complain', {
       body: form,
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     })
       .then((response) => response.json())
@@ -91,13 +99,14 @@ export default function PostComplainScreen({ navigation }) {
         setLoading(false);
         setSelectedItem(false);
         onChangeImage(null);
-        setMessage("");
-        setLocationText("");
+        setMessage('');
+        setLocationText('');
         setError(false);
         setAnonymous(false);
         setGallery(false);
         setSelectedOrganization(false);
-        alert("Your complain has been placed successfully", responseData);
+        setChange(!change);
+        alert('Your complain has been placed successfully', responseData);
       });
   };
   const setFromGallery = (item) => {
@@ -140,16 +149,16 @@ export default function PostComplainScreen({ navigation }) {
             ))}
           <AppText style={authStyle.text}>Message</AppText>
           <Input
-            placeholder="Enter any message here"
+            placeholder='Enter any message here'
             numberOfLines={4}
             value={message}
             onChangeText={(e) => setMessage(e)}
           />
           <AppText style={authStyle.text}>Send complain as anonymous</AppText>
           <Button
-            title={anonymous ? "Anoymous mode" : "Not anonymous mode"}
-            style={{ backgroundColor: "white", marginTop: 5, marginBottom: 5 }}
-            buttonFontStyle={{ color: Colors.primaryLight, fontWeight: "600" }}
+            title={anonymous ? 'Anoymous mode' : 'Not anonymous mode'}
+            style={{ backgroundColor: 'white', marginTop: 5, marginBottom: 5 }}
+            buttonFontStyle={{ color: Colors.primaryLight, fontWeight: '600' }}
             onPress={() => setAnonymous(!anonymous)}
           />
           <View>
@@ -166,27 +175,16 @@ export default function PostComplainScreen({ navigation }) {
             <ErrorMessage
               visible={error}
               error={error}
-              style={{ textAlign: "center", marginTop: 30 }}
+              style={{ textAlign: 'center', marginTop: 30 }}
             />
           </View>
-
-          {/* <MaterialCommunityIcons
-                    name="camera"
-                    size={32}
-                    style={{ alignSelf: 'flex-end' }}
-                />
-                <MaterialCommunityIcons
-                    name="file"
-                    size={32}
-                    style={{ alignSelf: 'flex-end' }}
-                /> */}
         </View>
 
         <View style={authStyle.registerBtn}>
           {!loading && !fetching ? (
-            <Button title="Post" onPress={handleSubmit} />
+            <Button title='Post' onPress={handleSubmit} />
           ) : (
-            <ActivityIndicator color={!fetching ? Colors.primary : "white"} />
+            <ActivityIndicator color={!fetching ? Colors.primary : 'white'} />
           )}
         </View>
       </ScrollView>

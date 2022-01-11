@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import AuthNavigation from "./app/navigation/auth-navigation/AuthNavigation";
-import AuthContext from "./app/Context/AuthContext";
-import axios from "axios";
-import env from "./app/config/environment/environment";
-import AppNavigation from "./app/navigation/app-navigation/TabNavigation";
-import * as Notifications from "expo-notifications";
-import socket from "./app/config/socket";
-import ActivityIndicator from "./app/components/ActivityIndicator";
-import OfflineNotice from "./app/components/OfflineNotice";
+/** @format */
+
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigation from './app/navigation/auth-navigation/AuthNavigation';
+import AuthContext from './app/Context/AuthContext';
+import axios from 'axios';
+import env from './app/config/environment/environment';
+import AppNavigation from './app/navigation/app-navigation/TabNavigation';
+import * as Notifications from 'expo-notifications';
+import socket from './app/config/socket';
+import ActivityIndicator from './app/components/ActivityIndicator';
+import OfflineNotice from './app/components/OfflineNotice';
 export default function App() {
   const [user, setUser] = useState(false);
   const [change, setChange] = useState(false);
-  const [forgetEmail, setForgetEmail] = useState("");
+  const [forgetEmail, setForgetEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const [coords, setCoords] = useState(null);
 
   const getProfile = async () => {
     setLoading(true);
@@ -44,12 +47,12 @@ export default function App() {
   }, [change]);
 
   useEffect(() => {
-    socket.on("notification", ({ updated, complain }) => {
+    socket.on('notification', ({ updated, complain }) => {
       if (user) {
         if (updated) {
           if (updated._doc.email === user.email) {
             showNotification(
-              "Complain Status Update",
+              'Complain Status Update',
               `Your complaint against ${updated._doc.organizationName} has been updated`
             );
           }
@@ -57,7 +60,7 @@ export default function App() {
       }
     });
     return () => {
-      socket.off("notification");
+      socket.off('notification');
     };
   }, [user]);
 
@@ -73,6 +76,8 @@ export default function App() {
           change,
           forgetEmail,
           setForgetEmail,
+          coords,
+          setCoords,
         }}
       >
         <OfflineNotice />
