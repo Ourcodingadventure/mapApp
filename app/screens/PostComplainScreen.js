@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  ActivityIndicator,
-  ScrollView,
-  FlatList,
-  StyleSheet,
-  Modal,
-} from "react-native";
+import { View, ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 import AppText from "../components/text/AppText";
 import H3 from "../components/text/H2";
 import { authStyle } from "../config/styles";

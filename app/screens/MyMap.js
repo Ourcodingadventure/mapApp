@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Polyline } from "react-native-maps";
-import { View, StyleSheet, Dimensions } from "react-native";
-import MapView from "react-native-maps";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
@@ -125,19 +123,22 @@ export default function MyMap() {
         source={require("../assets/icons/go-button.png")}
       />
 
+      {/* start tracing */}
+
+      <MaterialCommunityIcons
+        style={styles.iconGo}
+        name="play"
+        color="white"
+        size={60}
+      />
+
       {/* show these 2 while tracing */}
 
-      {/* <Image
-        style={styles.iconStop}
-        source={require("../assets/icons/stop-button.png")}
-      /> */}
+      {/* <MaterialCommunityIcons style={styles.iconStop} name="stop" color="white" size={60} /> */}
 
       {/* stop tracing */}
 
-      {/* <Image
-        style={styles.iconSave}
-        source={require("../assets/icons/save-location-button.png")}
-      /> */}
+      {/* <MaterialCommunityIcons style={styles.iconSave} name="plus" color="white" size={60} /> */}
     </View>
   );
 }
