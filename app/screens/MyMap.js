@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView from "react-native-maps";
+import MapView, { Polyline } from "react-native-maps";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
@@ -7,15 +7,36 @@ import environment from "../config/environment/environment";
 import useLocation from "../hooks/useLocation";
 import AppText from "../components/text/AppText";
 import axios from "axios";
-export default function MyMap({ navigation, route }) {
+import pick from "lodash/pick";
+import * as Location from "expo-location";
+Location.installWebGeolocationPolyfill();
+
+export default function MyMap() {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [markerArray, setMarkerArray] = useState([]);
+  const [route, setRoute] = useState([]);
   const { location, fetching } = useLocation();
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {},
+      (error) => alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    const watchID = navigator.geolocation.watchPosition((position) => {
+      const positionLatLngs = pick(position.coords, ["latitude", "longitude"]);
+      console.log();
+      setRoute((prev) => [...prev, positionLatLngs]);
+    });
+    return () => {
+      navigator.geolocation.clearWatch(watchID);
+    };
+  }, []);
+  console.log("route", route);
   const getFeedComplains = async () => {
     if (firstCall) {
       setLoading(true);
@@ -30,6 +51,7 @@ export default function MyMap({ navigation, route }) {
       setLoading(false);
     }
   };
+
   const handleAddMarker = (e) => {
     const markerCoords = e.nativeEvent.coordinate;
     const newMarkerArray = [...markerArray];
@@ -61,8 +83,17 @@ export default function MyMap({ navigation, route }) {
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
+          followUserLocation={true}
+          overlays={[
+            {
+              coordinates: route,
+              strokeColor: "#19B5FE",
+              lineWidth: 1000,
+            },
+          ]}
           onPress={(e) => handleAddMarker(e)}
         >
+          <Polyline coordinates={route} strokeWidth={5} />
           {markerArray.map((marker) => (
             <Marker
               key={Math.random()}

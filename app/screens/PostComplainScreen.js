@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
 import AppText from "../components/text/AppText";
 import H3 from "../components/text/H2";
@@ -17,7 +17,7 @@ import Screen from "../components/Screen";
 
 export default function PostComplainScreen({ navigation }) {
   const [error, setError] = useState(false);
-  // const [organization, setOrganization] = useState([]);
+
   const [selectedOrganization, setSelectedOrganization] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
