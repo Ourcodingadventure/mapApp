@@ -100,6 +100,7 @@ function regionFrom(lat, lon, distance) {
   const circumference = 40075;
   const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
   const angularDistance = distance / circumference;
+
   const latitudeDelta = distance / oneDegreeOfLatitudeInMeters;
   const longitudeDelta = Math.abs(
     Math.atan2(
