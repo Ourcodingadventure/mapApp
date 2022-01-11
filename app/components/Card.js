@@ -19,7 +19,7 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
                 setIsDisliked(false)   
             } else {
                 setIsLiked(false)
-                !isDisliked ?setLikesCount(prev=>prev-1): setLikesCount(prev=>prev+1)
+                !isDisliked ? likesCount!==0 && setLikesCount(prev=>prev-1): setLikesCount(prev=>prev+1)
             }
         } finally {
         }
@@ -28,7 +28,7 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
         try {
             if (!isLiked) {
                 likesCount>0 && setLikesCount(prev=>prev-1)
-                setIsLiked(true)
+                likesCount>0 && setIsLiked(true)
                 setIsDisliked(true)   
             } else {
                 setIsLiked(false)
