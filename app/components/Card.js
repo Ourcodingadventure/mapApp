@@ -32,7 +32,7 @@ function Card({ issueTitle, title, subTitle, imageUrl, onPress, thumbnailUrl, Ma
                 setIsDisliked(true)   
             } else {
                 setIsLiked(false)
-                !isDisliked ?setLikesCount(prev=>prev-1): setLikesCount(prev=>prev+1)
+                !isDisliked ?setLikesCount(prev=>prev-1): likesCount!==0 && setLikesCount(prev=>prev+1)
             }
         } finally {
         }
