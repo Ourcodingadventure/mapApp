@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
-import React, { useState, useEffect, useCallback } from "react";
+
 import {
   View,
   ActivityIndicator,
@@ -45,15 +44,6 @@ export default function PostComplainScreen({ navigation }) {
     { name: "Violent Animals", id: 7 },
   ]);
   const { location, fetching } = useLocation();
-
-  const getOrganization = async () => {
-    let data = await axios.get(`${environment.baseUrl}/organization`);
-    setOrganization(data.data.organization);
-  };
-
-  useEffect(() => {
-    getOrganization();
-  }, []);
 
   const handleSubmit = async () => {
     let localUri;
@@ -106,6 +96,7 @@ export default function PostComplainScreen({ navigation }) {
         setAnonymous(false);
         setGallery(false);
         setSelectedOrganization(false);
+
         alert("Your complain has been placed successfully", responseData);
       });
   };

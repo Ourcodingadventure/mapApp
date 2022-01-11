@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Polyline } from "react-native-maps";
-import { View, StyleSheet, Dimensions } from "react-native";
-import MapView from "react-native-maps";
-import { View, StyleSheet, Dimensions, Image } from "react-native";
+// import { View, StyleSheet, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Button,
+  ImageBackground,
+} from "react-native";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
 import environment from "../config/environment/environment";
@@ -11,6 +17,11 @@ import AppText from "../components/text/AppText";
 import axios from "axios";
 import pick from "lodash/pick";
 import * as Location from "expo-location";
+import AppButton from "../components/Button";
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 Location.installWebGeolocationPolyfill();
 
 export default function MyMap() {
@@ -21,6 +32,7 @@ export default function MyMap() {
   const [refreshing, setRefreshing] = useState(false);
   const [markerArray, setMarkerArray] = useState([]);
   const [route, setRoute] = useState([]);
+  const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
 
   useEffect(() => {
@@ -31,7 +43,7 @@ export default function MyMap() {
     );
     const watchID = navigator.geolocation.watchPosition((position) => {
       const positionLatLngs = pick(position.coords, ["latitude", "longitude"]);
-      console.log();
+
       setRoute((prev) => [...prev, positionLatLngs]);
     });
     return () => {
@@ -70,7 +82,7 @@ export default function MyMap() {
     return () => {
       socket.off("complain");
     };
-  }, []);
+  }, [change]);
   //todo
   return (
     <View style={styles.container}>
@@ -120,10 +132,6 @@ export default function MyMap() {
         </MapView>
       )}
       {/* start tracing */}
-      <Image
-        style={styles.iconGo}
-        source={require("../assets/icons/go-button.png")}
-      />
 
       {/* show these 2 while tracing */}
 
@@ -143,11 +151,11 @@ export default function MyMap() {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
+
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
@@ -156,6 +164,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 50,
     right: 40,
+    zIndex: 9999,
   },
   iconStop: {
     position: "absolute",
