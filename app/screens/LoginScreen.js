@@ -1,7 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, TouchableWithoutFeedback, ActivityIndicator, ImageBackground } from "react-native";
+import {
+  View,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
+  ImageBackground,
+} from "react-native";
 import AppText from "../components/text/AppText";
-// import H3 from "../components/text/H2";
 import { authStyle } from "../config/styles";
 import FormField from "../components/form/FormField";
 import Form from "../components/form/Form";
@@ -12,7 +16,6 @@ import environment from "../config/environment/environment";
 import ErrorMessage from "../components/form/ErrorMessage";
 import AuthContext from "../Context/AuthContext";
 import Colors from "../config/Colors";
-import Screen from "../components/Screen";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("Required").email().label("Email"),
@@ -47,52 +50,52 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <Screen style={authStyle.container}>
-      <ImageBackground
-        resizeMode="cover"
-        style={authStyle.image}
-        source={require("../assets/splash.png")}
+    <ImageBackground
+      resizeMode="cover"
+      style={authStyle.image}
+      source={require("../assets/splash.png")}
+    >
+      <Form
+        initialValues={{ email: "", password: "" }}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
       >
-        {/* <View style={authStyle.headerContainer}>
-          <H3 style={authStyle.headerText}>Login</H3>
-        </View> */}
-        <Form
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <View style={authStyle.formContainer}>
-            <AppText style={authStyle.text}>Email</AppText>
-            <FormField
-              placeholder="Enter email"
-              inputContainerStyle={[authStyle.input, { marginBottom: 5 }]}
-              name="email"
-            />
-            <AppText style={authStyle.text}>Password</AppText>
-            <FormField
-              placeholder="Enter password"
-              inputContainerStyle={authStyle.input}
-              secureTextEntry
-              name="password"
-            />
-            <ErrorMessage visible={error} error={error} />
+        <View style={authStyle.formContainer}>
+          <FormField
+            placeholder="Your email"
+            inputContainerStyle={authStyle.input}
+            name="email"
+          />
+          <FormField
+            placeholder="Your password"
+            inputContainerStyle={authStyle.input}
+            secureTextEntry
+            name="password"
+          />
+          <ErrorMessage visible={error} error={error} />
+        </View>
+
+        <View style={authStyle.registerBtn}>
+          {!loading ? (
+            <SubmitButton title="SIGN IN" />
+          ) : (
+            <ActivityIndicator color={Colors.primary} />
+          )}
+
+          <View style={authStyle.flexElementsShort}>
+            <View style={authStyle.divider}></View>
+            <AppText style={authStyle.or}>OR</AppText>
+            <View style={authStyle.divider}></View>
           </View>
 
-          <View style={authStyle.registerBtn}>
-            <AppText style={authStyle.btnLabel}>
-              Don't have an account?{" "}
-              <TouchableWithoutFeedback onPress={navigateToRegister}>
-                <AppText style={authStyle.btnLabelText}>Register </AppText>
-              </TouchableWithoutFeedback>
-            </AppText>
-            {!loading ? (
-              <SubmitButton title="Login" />
-            ) : (
-              <ActivityIndicator color={Colors.primary} />
-            )}
+          <View style={authStyle.flexElements}>
+            <AppText style={authStyle.btnLabel}>FIRST TIME HERE? </AppText>
+            <TouchableWithoutFeedback onPress={navigateToRegister}>
+              <AppText style={authStyle.btnLabel}>CREATE ACCOUNT </AppText>
+            </TouchableWithoutFeedback>
           </View>
-        </Form>
-      </ImageBackground>
-    </Screen>
+        </View>
+      </Form>
+    </ImageBackground>
   );
 }

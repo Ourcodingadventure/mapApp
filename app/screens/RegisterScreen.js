@@ -4,9 +4,9 @@ import {
   TouchableWithoutFeedback,
   Alert,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import AppText from "../components/text/AppText";
-import H3 from "../components/text/H2";
 import { authStyle } from "../config/styles";
 import FormField from "../components/form/FormField";
 import Form from "../components/form/Form";
@@ -55,31 +55,29 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={authStyle.container}>
-      <View style={authStyle.headerContainer}>
-        <H3 style={authStyle.headerText}>Register</H3>
-      </View>
+    <ImageBackground
+      resizeMode="cover"
+      style={authStyle.image}
+      source={require("../assets/splash.png")}
+    >
       <Form
         initialValues={{ username: "", email: "", password: "" }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <View style={authStyle.formContainer}>
-          <AppText style={authStyle.text}>Username</AppText>
           <FormField
-            placeholder="Enter username"
+            placeholder="Your username"
             inputContainerStyle={authStyle.input}
             name="username"
           />
-          <AppText style={authStyle.text}>Email</AppText>
           <FormField
-            placeholder="Enter email"
+            placeholder="Your email"
             inputContainerStyle={[authStyle.input, { marginBottom: 5 }]}
             name="email"
           />
-          <AppText style={authStyle.text}>Password</AppText>
           <FormField
-            placeholder="Enter password"
+            placeholder="Your password"
             inputContainerStyle={authStyle.input}
             secureTextEntry
             name="password"
@@ -88,19 +86,26 @@ export default function LoginScreen({ navigation }) {
         </View>
 
         <View style={authStyle.registerBtn}>
-          <AppText style={authStyle.btnLabel}>
-            Already Have an account?{" "}
-            <TouchableWithoutFeedback onPress={navigateToLogin}>
-              <AppText style={authStyle.btnLabelText}>Login</AppText>
-            </TouchableWithoutFeedback>
-          </AppText>
           {!loading ? (
-            <SubmitButton title="Register" />
+            <SubmitButton title="SIGN UP" />
           ) : (
             <ActivityIndicator color={Colors.primary} />
           )}
+
+          <View style={authStyle.flexElementsShort}>
+            <View style={authStyle.divider}></View>
+            <AppText style={authStyle.or}>OR</AppText>
+            <View style={authStyle.divider}></View>
+          </View>
+
+          <View style={authStyle.flexElements}>
+            <AppText style={authStyle.btnLabel}>HAVE AN ACCOUNT? </AppText>
+            <TouchableWithoutFeedback onPress={navigateToLogin}>
+              <AppText style={authStyle.btnLabel}>PROCEED TO LOGIN</AppText>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </Form>
-    </View>
+    </ImageBackground>
   );
 }

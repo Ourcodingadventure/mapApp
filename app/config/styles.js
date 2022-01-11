@@ -3,71 +3,95 @@ import { Platform, StyleSheet } from "react-native";
 import colors from "./Colors";
 
 export default {
-    colors,
-    text: {
-        color: colors.primary,
-        fontSize: 16,
-        fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
-    },
+  colors,
+  text: {
+    color: colors.primary,
+    fontSize: 16,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
+  },
 };
 
 const authStyle = StyleSheet.create({
-    btnLabel: {
-        textAlign: 'center',
-        marginBottom: 6,
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    formContainer: {
-        padding: 30,
-        paddingTop: 2,
-        flex: 1,
-        justifyContent: 'center',
-    },
-    // headerContainer: {
-    //     marginHorizontal: 10,
-    //     backgroundColor: colors.primary,
-    // },
-    // headerText: {
-    //     fontWeight: 'bold',
-    //     color: '#333',
-    //     textAlign: 'center',
-    //     marginTop: 35,
-    //     color: 'white',
-    // },
-    text: {
-        color: colors.primary,
-        fontSize: 14,
-        fontWeight: "500",
-    },
+  flexElements: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  flexElementsShort: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 15,
+    marginTop: 15,
+  },
+  btnLabel: {
+    color: colors.transparentWhite,
+    fontSize: 11,
+    letterSpacing: 2,
+  },
+  or: {
+    color: colors.semiTransparentWhite,
+    fontSize: 13,
+    alignSelf: "center",
+    padding: 10,
+  },
+  divider: {
+    height: 1,
+    width: 50,
+    backgroundColor: colors.barelySeenWhite,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  formContainer: {
+    padding: 30,
+    paddingTop: 100,
+    flex: 1,
+    justifyContent: "center",
+  },
+  input: {
+    borderWidth: 0,
+    backgroundColor: "rgba(51,48,49, 0.35)",
+    height: 60,
+    borderRadius: 11,
+  },
+//   headerContainer: {
+//     marginHorizontal: 10,
+//     backgroundColor: colors.primary,
+//   },
+//   headerText: {
+//     fontWeight: "bold",
+//     color: "#333",
+//     textAlign: "center",
+//     marginTop: 35,
+//     color: "white",
+//   },
+//   text: {
+//     color: colors.primary,
+//     fontSize: 14,
+//     fontWeight: "500",
+//   },
+  registerBtn: {
+    alignSelf: "center",
+    justifyContent: "flex-end",
+    padding: 30,
+    width: "100%",
+    marginBottom: 20,
+  },
+//   organizationContainer: {
+//     marginTop: 5,
+//     flexDirection: "row",
+//     display: "flex",
+//     marginBottom: 20,
+//   },
+//   active: {
+//     backgroundColor: "white",
+//   },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+  },
+});
 
-    registerBtn: {
-        alignSelf: 'center',
-        width: '90%',
-        justifyContent: 'flex-end',
-        padding: 30,
-        width: '90%',
-    },
-    organizationContainer: {
-        marginTop: 5,
-        flexDirection: 'row',
-        display: 'flex',
-        marginBottom: 20
-    },
-    active: {
-        backgroundColor: 'white',
-
-    },
-    btnLabelText: { color: colors.primary, fontWeight: "600" },
-    image: {
-        flex: 1,
-        justifyContent: "center"
-    },
-
-})
-
-export {
-    authStyle
-}
+export { authStyle };

@@ -8,7 +8,7 @@ import {
 import colors from '../config/Colors';
 import { EvilIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function SearchInput({ inputContainerStyle, CustomIcon, inputStyle, onChangeText, iconName, iconSize = 20, color = 'gray', iconStyle, placeholder = '', value, ...otherProps }) {
+export default function SearchInput({ inputContainerStyle, CustomIcon, inputStyle, onChangeText, iconName, iconSize = 25, color = "rgba(255,255,255, 0.6)", iconStyle, placeholder = '', value, ...otherProps }) {
     const [showIcon, setShowIcon] = React.useState(true);
     const [secureTextEntry, setSecureTextEntry] = useState(otherProps.secureTextEntry);
     return (
@@ -53,8 +53,9 @@ const styles = StyleSheet.create({
     input: {
         width: '100%',
         paddingLeft: 10,
-        color: colors.primary,
+        color: colors.white,
         fontWeight: "500",
+        fontSize:17,
         flex: 1
     },
     icon: {
