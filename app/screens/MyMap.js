@@ -88,7 +88,7 @@ export default function MyMap({ navigation }) {
       {location && (
         <MapView
           style={styles.map}
-          region={{
+          initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
             latitudeDelta: 0.0922,
