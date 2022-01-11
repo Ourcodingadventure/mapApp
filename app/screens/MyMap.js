@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Polyline } from "react-native-maps";
-// import { View, StyleSheet, Dimensions } from "react-native";
+
 import {
   View,
   StyleSheet,
@@ -18,31 +18,22 @@ import axios from "axios";
 import pick from "lodash/pick";
 import * as Location from "expo-location";
 import AppButton from "../components/Button";
+import AuthContext from "../Context/AuthContext";
 import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native-gesture-handler";
 Location.installWebGeolocationPolyfill();
 
-import React, { useState, useEffect, useContext } from "react";
-import MapView from "react-native-maps";
-import { View, StyleSheet, Dimensions, Text, TextInput } from "react-native";
-import { Marker, Callout } from "react-native-maps";
-import socket from "../config/socket";
-import environment from "../config/environment/environment";
-import useLocation from "../hooks/useLocation";
-import AppText from "../components/text/AppText";
-import AuthContext from "../Context/AuthContext";
-import axios from "axios";
-export default function MyMap({ navigation, route }) {
+export default function MyMap() {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [change, setChange] = useState(false);
   const [firstCall, setFirstCall] = useState(true);
-
   const [route, setRoute] = useState([]);
+  const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
   const { coords, setCoords, change, setChange } = useContext(AuthContext);
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {},
@@ -66,29 +57,29 @@ export default function MyMap({ navigation, route }) {
     }
     try {
       let data = await axios.get(`${environment.baseUrl}/all-complains`);
+
       setFeed(data.data.complain.reverse());
     } catch (err) {
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getFeedComplains();
-    socket.on("complain", () => {
-      setChange(!change);
-    });
-    return () => {
-      socket.off("complain");
-    };
-  }, []);
-
   const handleAddMarker = (e) => {
     const markerCoords = e.nativeEvent.coordinate;
     setCoords(markerCoords);
     navigation.navigate("PostComplainTab");
   };
+  useEffect(() => {
+    getFeedComplains();
+    socket.on("complain", () => {
+      setChange(!change);
+    });
 
+    return () => {
+      socket.off("complain");
+    };
+  }, [change]);
+  //todo
   return (
     <View style={styles.container}>
       <AppText>Loading</AppText>
@@ -102,8 +93,18 @@ export default function MyMap({ navigation, route }) {
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
-          onPress={handleAddMarker}
+          followUserLocation={true}
+          overlays={[
+            {
+              coordinates: route,
+              strokeColor: "#19B5FE",
+              lineWidth: 1000,
+            },
+          ]}
+          onPress={(e) => handleAddMarker(e)}
         >
+          <Polyline coordinates={route} strokeWidth={5} />
+
           {feed.map((mark) => {
             return (
               <Marker
@@ -139,7 +140,6 @@ export default function MyMap({ navigation, route }) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -165,6 +165,12 @@ const styles = StyleSheet.create({
     bottom: 140,
     right: 40,
   },
+
+  button: {
+    backgroundColor: "#DDDDDD",
+    marginTop: 200,
+    padding: 30,
+  },
 });
 
 function regionFrom(lat, lon, distance) {
@@ -187,4 +193,43 @@ function regionFrom(lat, lon, distance) {
     latitudeDelta,
     longitudeDelta,
   });
+}
+
+// <View style={styles.footer}>
+// {!track ? (
+//   <Button title="start" onPress={() => setTrack(true)}>
+//     <Image
+//       style={styles.iconGo}
+//       source={require("../assets/icons/go-button.png")}
+//     />
+//   </Button>
+// ) : (
+//   <React.Fragment>
+//     {/* <Image
+//   style={styles.iconStop}
+//   source={require("../assets/icons/stop-button.png")}
+//   onPress={setTrack(false)}
+// /> */}
+//     <Image
+//       style={styles.iconSave}
+//       source={require("../assets/icons/save-location-button.png")}
+//     />
+//   </React.Fragment>
+// )}
+// </View>
+{
+  /* <View>
+            <TouchableOpacity onPress={() => Alert.alert("image clicked")}>
+              <TouchableOpacity
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Image
+                  source={require("../assets/icons/go-button.png")}
+                  style={styles.button}
+                />
+              </TouchableOpacity>
+            </TouchableOpacity>
+          </View> */
 }
