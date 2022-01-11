@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Polyline } from "react-native-maps";
 import { View, StyleSheet, Dimensions, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Marker } from "react-native-maps";
 import socket from "../config/socket";
 import environment from "../config/environment/environment";
