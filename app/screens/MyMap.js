@@ -29,6 +29,8 @@ import ComplainButton from '../components/ComplainButton';
 import PostButton from '../components/PostButton';
 import Colors from '../config/Colors';
 import Loader from '../components/Loader';
+import Timer from '../components/Timer';
+import haversine from 'haversine';
 
 Location.installWebGeolocationPolyfill();
 
@@ -40,9 +42,32 @@ export default function MyMap({ navigation }) {
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
+  const [timer, setTimer] = useState(0);
+  const [distanceTravelled, setDistanceTravelled] = useState(0);
+  const [prevLatLng, setPrevLatLng] = useState('');
+  const [timerOn, setTimerOn] = useState(false);
   const { coords, setCoords, change, setChange, user } =
     useContext(AuthContext);
 
+  const handleTrackOn = () => {
+    setTrack(true);
+    setTimerOn(true);
+  };
+  const handleTrackOff = () => {
+    setTrack(false);
+    setTimerOn(false);
+    setTimer(0);
+  };
+
+  useEffect(() => {
+    let interval;
+    if (timerOn) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 10);
+      }, 10);
+    }
+    return () => clearInterval(interval);
+  });
   useEffect(() => {
     let watchID;
     if (track) {
@@ -56,15 +81,23 @@ export default function MyMap({ navigation }) {
           'latitude',
           'longitude',
         ]);
-
+        const newLatLngs = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
         setRoute((prev) => [...prev, positionLatLngs]);
+        setDistanceTravelled(distanceTravelled + calcDistance(newLatLngs));
+        setPrevLatLng(newLatLngs);
       });
     }
     return () => {
       navigator.geolocation.clearWatch(watchID);
       setRoute([]);
     };
-  }, [track]);
+  }, [track, distanceTravelled]);
+  const calcDistance = (newLatLng) => {
+    return haversine(prevLatLng, newLatLng) || 0;
+  };
   console.log('route', route);
   const getFeedComplains = async () => {
     if (firstCall) {
@@ -103,8 +136,10 @@ export default function MyMap({ navigation }) {
       )}
       {!fetching && (
         <View style={styles.flexBetween}>
-          <Text style={styles.headway}>HEADWAY </Text>
-
+          <Text>
+            DistanceTraveled {parseFloat(distanceTravelled).toFixed(2)}
+          </Text>
+          {timerOn && <Timer timer={timer} />}
           {!track ? (
             <MaterialCommunityIcons
               name='play'
@@ -114,7 +149,7 @@ export default function MyMap({ navigation }) {
               onTouchEnd={(e) => {
                 e.stopPropagation();
               }}
-              onPress={() => setTrack(true)}
+              onPress={() => handleTrackOn()}
             />
           ) : (
             <>
@@ -127,7 +162,7 @@ export default function MyMap({ navigation }) {
                   onTouchEnd={(e) => {
                     e.stopPropagation();
                   }}
-                  onPress={() => setTrack(false)}
+                  onPress={() => handleTrackOff()}
                 />
 
                 <MaterialCommunityIcons
@@ -240,7 +275,7 @@ const styles = StyleSheet.create({
   headway: {
     fontSize: 50,
     fontStyle: 'italic',
-    fontFamily: 'sans-serif',
+    // fontFamily: "sans-serif",
     color: 'white',
     fontSize: 35,
     fontWeight: 'bold',
@@ -256,7 +291,7 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     paddingLeft: 30,
     paddingTop: 20,
-    height: 110,
+    height: 180,
   },
   loader: {
     position: 'absolute',
