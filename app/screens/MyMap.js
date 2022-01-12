@@ -38,7 +38,8 @@ export default function MyMap({ navigation }) {
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
-  const { coords, setCoords, change, setChange } = useContext(AuthContext);
+  const { coords, setCoords, change, setChange, user } =
+    useContext(AuthContext);
 
   useEffect(() => {
     let watchID;
@@ -145,6 +146,7 @@ export default function MyMap({ navigation }) {
 
       {location && !fetching && (
         <MapView
+          userLocationAnnotationTitle={user.name}
           showsMyLocationButton={true}
           showsBuildings={true}
           showsCompass={true}
@@ -164,7 +166,7 @@ export default function MyMap({ navigation }) {
               lineWidth: 1000,
             },
           ]}
-          onPress={(e) => handleAddMarker(e)}
+          onLongPress={(e) => handleAddMarker(e)}
         >
           {track && <Polyline coordinates={route} strokeWidth={5} />}
           {feed.map((mark) => {

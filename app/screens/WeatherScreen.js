@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,25 +8,24 @@ import {
   ScrollView,
   Text,
   Image,
-} from 'react-native';
-import { weatherApi } from '../config/environment/environment.js';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+} from "react-native";
+import { weatherApi } from "../config/environment/environment.js";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function WeatherScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [description, setDescription] = useState('');
-  const [weather, setWeather] = useState('');
-  const [humidity, setHumidity] = useState('');
-  const [feelsLike, setFeelsLike] = useState('');
+  const [description, setDescription] = useState("");
+  const [weather, setWeather] = useState("");
+  const [humidity, setHumidity] = useState("");
+  const [feelsLike, setFeelsLike] = useState("");
   const [temp, setTemp] = useState(null);
-  const [place, setPlace] = useState('');
+  const [place, setPlace] = useState("");
   const [icon, setIcon] = useState(null);
   const [wind, setWind] = useState({});
 
   const fetchWeather = async (lat, long) => {
     await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=ee674281ee3c34d6364f35e597682a6c
-&units=metric`
+      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&APPID=ee674281ee3c34d6364f35e597682a6c&units=metric`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -76,9 +75,9 @@ export default function WeatherScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     padding: 25,
