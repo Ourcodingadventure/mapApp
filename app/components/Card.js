@@ -104,7 +104,7 @@ function Card({
         {imageUrl && (
           <Image
             style={styles.image}
-            source={{ uri: imageUrl.uri, method: "get" }}
+            source={{ uri: imageUrl, method: "get" }}
           />
         )}
 

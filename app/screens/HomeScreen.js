@@ -164,11 +164,7 @@ export default function HomeScreen({ navigation }) {
                   remarks={item.remarks}
                   count={item.likesCount}
                   createdOn={item.createdOn}
-                  imageUrl={
-                    item.image
-                      ? { uri: `${environment.baseUrl}/${item.image}` }
-                      : false
-                  }
+                  imageUrl={item.image && item.image}
                   subTitle={`By: ${item.name}`}
                   secTitle={`Status: ${item.status}`}
                   issueTitle={item.issueName}
