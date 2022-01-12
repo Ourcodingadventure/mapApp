@@ -29,7 +29,7 @@ Location.installWebGeolocationPolyfill();
 export default function MyMap({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [change, setChange] = useState(false);
+
   const [firstCall, setFirstCall] = useState(true);
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
@@ -87,6 +87,10 @@ export default function MyMap({ navigation }) {
       <AppText>Loading</AppText>
       {location && (
         <MapView
+          userInterfaceStyle={"dark"} //do we want light or dark?
+          showsMyLocationButton={true}
+          showsBuildings={true}
+          showsCompass={true}
           style={styles.map}
           initialRegion={{
             latitude: location.latitude,

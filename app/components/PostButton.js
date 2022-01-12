@@ -4,8 +4,10 @@ import Colors from "../config/Colors";
 
 function PostButton({ onPress, style, source, onTouchEnd }) {
   return (
-    <TouchableOpacity onTouchEnd={onTouchEnd} onPress={onPress}>
-      <Image style={style} source={source} />
+    <TouchableOpacity onTouchEnd={onTouchEnd}>
+      <TouchableOpacity onPress={onPress}>
+        <Image style={style} source={source} />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 }
