@@ -8,6 +8,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
 } from "react-native";
 import AppText from "../components/text/AppText";
 import H3 from "../components/text/H2";
@@ -154,7 +155,7 @@ export default function PostComplainScreen({ navigation }) {
           <View style={styles.division2}></View>
 
           <AppText style={styles.description}>DESCRIPTION</AppText>
-          <Input
+          <TextInput
             style={styles.message}
             placeholder="Describe the problem..."
             numberOfLines={4}
@@ -322,6 +323,16 @@ const styles = StyleSheet.create({
   message: {
     color: "black",
     fontSize: 16,
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
+    paddingLeft: 15,
+    height: 150,
+    marginLeft: 30,
+    marginRight: 30,
+    color: Colors.black,
+    marginBottom: 15,
+    paddingTop: 15,
+    textAlignVertical: "top",
   },
   image: {},
   registerBtn: {
@@ -338,7 +349,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "flex-end",
     color: "#6C7B8AFF",
-    fontSize:13,
-
+    fontSize: 13,
   },
 });
