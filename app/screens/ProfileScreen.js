@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   icon: {},
   logoutButton: {
     textAlign: "center",
-    textAlignVertical: "center",
+    paddingTop: 12,
     alignSelf: "center",
     backgroundColor: Colors.pink,
     borderRadius: 50,
