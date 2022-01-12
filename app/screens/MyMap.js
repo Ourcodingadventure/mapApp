@@ -37,20 +37,27 @@ export default function MyMap({ navigation }) {
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
   const { coords, setCoords, change, setChange } = useContext(AuthContext);
+  console.log(location);
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {},
-      (error) => alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-    const watchID = navigator.geolocation.watchPosition((position) => {
-      const positionLatLngs = pick(position.coords, ["latitude", "longitude"]);
+    let watchID;
+    if (track) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {},
+        (error) => alert(error.message),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+      watchID = navigator.geolocation.watchPosition((position) => {
+        const positionLatLngs = pick(position.coords, [
+          "latitude",
+          "longitude",
+        ]);
 
-      setRoute((prev) => [...prev, positionLatLngs]);
-    });
-
+        setRoute((prev) => [...prev, positionLatLngs]);
+      });
+    }
     return () => {
       navigator.geolocation.clearWatch(watchID);
+      setRoute([]);
     };
   }, [track]);
   console.log("route", route);
