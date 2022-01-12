@@ -32,8 +32,8 @@ function Card({
   const [likesCount, setLikesCount] = useState(0);
 
   useEffect(()=>{
-    count<-4 && axios.post(`${environment.baseUrl}/delete-complain`, {id});
-  }, [])
+    if (count<-4) axios.post(`${environment.baseUrl}/delete-complain`, {id}).catch(e=>console.log(e));
+  }, [count])
   useEffect(() => {
     typeof count === "number" && count === count && setLikesCount(count);
   }, [count]);
