@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import MapView, { Polyline, Marker } from "react-native-maps";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
@@ -94,45 +94,65 @@ export default function MyMap({ navigation }) {
   //todo
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      <View style={styles.card}>
-        <Text
-          style={{
-            fontSize: 50,
-            paddingTop: 10,
-            display: "flex",
-            // justifyContent: "center",
-            // alignItems: "center",
-          }}
-        >
-          HEADWAY
-        </Text>
+      <View style={styles.flexBetween}>
+        <Text style={styles.headway}>HEADWAY </Text>
 
         {!track ? (
-          <PostButton
+          // <PostButton
+          //   onTouchEnd={(e) => {
+          //     e.stopPropagation();
+          //   }}
+          //   style={styles.iconGo}
+          //   source={require("../assets/icons/go-button.png")}
+          //   onPress={() => setTrack(true)}
+          // />
+          <MaterialCommunityIcons
+            name="play"
+            color={"white"}
+            size={50}
+            style={styles.tracingButton}
             onTouchEnd={(e) => {
               e.stopPropagation();
             }}
-            style={styles.iconGo}
-            source={require("../assets/icons/go-button.png")}
             onPress={() => setTrack(true)}
           />
         ) : (
           <>
             <React.Fragment>
-              <PostButton
+              {/* <PostButton
                 onTouchEnd={(e) => {
                   e.stopPropagation();
                 }}
                 style={styles.iconStop}
                 source={require("../assets/icons/stop-button.png")}
                 onPress={() => setTrack(false)}
+              /> */}
+              <MaterialCommunityIcons
+                name="stop"
+                color={"white"}
+                size={50}
+                style={styles.tracingButton}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                }}
+                onPress={() => setTrack(false)}
               />
-              <PostButton
+              {/* <PostButton
                 onTouchEnd={(e) => {
                   e.stopPropagation();
                 }}
                 style={styles.iconSave}
                 source={require("../assets/icons/save-location-button.png")}
+                onPress={(e) => handleAddMarker(e)}
+              /> */}
+              <MaterialCommunityIcons
+                name="plus"
+                color={"white"}
+                size={50}
+                style={styles.tracingButton}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                }}
                 onPress={(e) => handleAddMarker(e)}
               />
             </React.Fragment>
@@ -191,38 +211,46 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   card: {
-    backgroundColor: Colors.semiTransparentWhite,
-    width: "97%",
+    backgroundColor: Colors.purple,
+    width: "100%",
     height: 110,
   },
-
+  headway: {
+    fontSize: 50,
+    fontStyle: "italic",
+    fontFamily: "sans-serif",
+    color: "white",
+    fontSize: 35,
+    fontWeight: "bold",
+    textShadowColor: Colors.darkPurple,
+    textShadowRadius: 4,
+    textShadowOffset: { width: 4, height: 4 },
+  },
+  flexBetween: {
+    backgroundColor: Colors.purple,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingRight: 30,
+    paddingLeft: 30,
+    paddingTop: 20,
+    height: 110,
+  },
+  tracingButton: {
+    paddingTop: 3,
+    paddingLeft: 5,
+    borderWidth: 2,
+    borderColor: "white",
+    borderRadius: 50,
+  },
   map: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
-  image: {
-    height: 400,
-    width: 400,
-  },
-  iconGo: {
-    position: "absolute",
-    top: 20,
-    right: 10,
-    zIndex: 9999999,
-  },
-  iconStop: {
-    position: "absolute",
-    top: 20,
-    right: 10,
-    zIndex: 9999999,
-  },
-  iconSave: {
-    position: "absolute",
-    top: 20,
-    right: 80,
-    zIndex: 9999999,
-  },
+  iconGo: {},
+  iconStop: {},
+  iconSave: {},
 
   button: {
     backgroundColor: "#DDDDDD",

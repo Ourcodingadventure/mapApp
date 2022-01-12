@@ -30,44 +30,60 @@ function Card({
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
-  console.log("count", count);
+
   useEffect(() => {
-    setLikesCount(count);
+    typeof count === "number" && count === count && setLikesCount(count);
   }, [count]);
+
   const handleLike = async () => {
     try {
       if (!isLiked) {
+        await updateLikes(likesCount + 1);
         setLikesCount((prev) => prev + 1);
         setIsLiked(true);
         setIsDisliked(false);
-      } else {
-        setIsLiked(false);
-        !isDisliked
-          ? likesCount !== 0 && setLikesCount((prev) => prev - 1)
-          : setLikesCount((prev) => prev + 1);
+        return;
       }
-      await updateLikes();
+
+      setIsLiked(false);
+      if (!isDisliked) {
+        await updateLikes(likesCount - 1);
+        setLikesCount((prev) => prev - 1);
+      } else {
+        await updateLikes(likesCount + 1);
+        setLikesCount((prev) => prev + 1);
+      }
     } finally {
     }
   };
   const handleDislike = async () => {
     try {
       if (!isLiked) {
-        likesCount > 0 && setLikesCount((prev) => prev - 1);
-        likesCount > 0 && setIsLiked(true);
+        await updateLikes(likesCount - 1);
+        setLikesCount((prev) => prev - 1);
+        setIsLiked(true);
         setIsDisliked(true);
-      } else {
-        setIsLiked(false);
-        !isDisliked
-          ? setLikesCount((prev) => prev - 1)
-          : likesCount !== 0 && setLikesCount((prev) => prev + 1);
+        return;
       }
-      await updateLikes();
+
+      setIsLiked(false);
+      if (!isDisliked) {
+        await updateLikes(likesCount - 1);
+        setLikesCount((prev) => prev - 1);
+      } else {
+        likesCount !== 0 && (await updateLikes(likesCount + 1));
+        likesCount !== 0 && setLikesCount((prev) => prev + 1);
+      }
     } finally {
     }
   };
-  const updateLikes = async () =>
-    axios.post(`${environment.baseUrl}/update-likes`, { id, likesCount });
+
+  const updateLikes = async (likes) =>
+    axios.post(`${environment.baseUrl}/update-likes`, {
+      id,
+      likesCount: likes,
+    });
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
@@ -97,6 +113,17 @@ function Card({
           </Text>
 
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+            <TouchableOpacity style={{ marginRight: 8 }} onPress={handleLike}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ color: "#4838AD", fontSize: 18 }}>{` ${likesCount}  `}</Text>
+                <MaterialCommunityIcons
+                  name="heart"
+                  color="rgb(254,40,105)"
+                  size={25}
+                />
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity onPress={handleDislike}>
               <View style={{ flexDirection: "row" }}>
                 <MaterialCommunityIcons
@@ -104,18 +131,6 @@ function Card({
                   color="rgb(254,40,105)"
                   size={25}
                 />
-                <Text style={{ color: "#4838AD" }}> </Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{ marginRight: 8 }} onPress={handleLike}>
-              <View style={{ flexDirection: "row" }}>
-                <MaterialCommunityIcons
-                  name="heart"
-                  color="rgb(254,40,105)"
-                  size={25}
-                />
-                <Text style={{ color: "#4838AD" }}>{` ${likesCount}`}</Text>
               </View>
             </TouchableOpacity>
           </View>
