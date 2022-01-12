@@ -100,10 +100,11 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     paddingLeft: 10,
-    color: colors.black,
+    color: colors.white,
     fontWeight: "500",
     fontSize: 17,
     flex: 1,
+
   },
   icon: {
     alignSelf: "center",

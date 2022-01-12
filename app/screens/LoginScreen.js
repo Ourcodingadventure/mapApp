@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   ImageBackground,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import AppText from "../components/text/AppText";
 import { authStyle } from "../config/styles";
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(51,48,49, 0.35)",
     height: 60,
     borderRadius: 11,
+    color: Colors.white,
   },
   formContainer: {
     paddingTop: 100,
