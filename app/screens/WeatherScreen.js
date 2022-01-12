@@ -13,7 +13,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useLocation from "../hooks/useLocation.js";
 import H3 from "../components/text/H3";
 import Colors from "../config/Colors";
-// import FastImage from 'react-native-fast-image'
 
 export default function WeatherScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,12 +38,16 @@ export default function WeatherScreen({ navigation }) {
         console.log(data);
         setIsLoading(false);
         setPlace(data.name);
-        setFeelsLike(data.main.feels_like);
-        setTemp(data.main.temp);
         setHumidity(data.main.humidity);
         setWeather(data.weather[0].description);
         setIcon(data.weather[0].icon);
         setWind(data.wind);
+
+        var newTemp = String(data.main.temp).slice(0, 2);
+        setTemp(newTemp);
+
+        var newTempFeelsLike = String(data.main.feels_like).slice(0, 2);
+        setFeelsLike(newTempFeelsLike);
 
         if (data.main.temp > 0) {
           setTempMarker("+");
@@ -121,28 +124,39 @@ export default function WeatherScreen({ navigation }) {
           <View style={styles.division}></View>
           <Text style={styles.date}>{currentDate}</Text>
           <View style={styles.flexBetweenNoPadding}>
-            {/* <FastImage
-            // style={styles.image}
-            source={{ uri: `http://openweathermap.org/img/wn/${icon}@2x.png` }}
-          ></FastImage> */}
             <Image
               style={styles.image}
               source={{
                 uri: `http://openweathermap.org/img/wn/${icon}@2x.png`,
               }}
+              // resizeMode="contain"
             ></Image>
             <View style={styles.flexColumn}>
               <Text style={styles.temp}>{`${tempMarker}${temp}°`}</Text>
               <Text
                 style={styles.expectedTemp}
-              >{`Feels like: ${expectedTempMarker}${feelsLike}`}</Text>
+              >{`Feels like: ${expectedTempMarker}${feelsLike}°`}</Text>
             </View>
           </View>
           <View style={styles.whiteContainer}>
-            <Text> humidity {humidity}</Text>
-            <Text> {weather}</Text>
-            <Text> wind speed {wind.speed}</Text>
-            <Text> humidity {humidity}</Text>
+            <Text style={styles.message}>
+              "You are so much sunshine in every square inch!"
+            </Text>
+            <View style={styles.weatherContainer}>
+              <Text style={styles.weather}>
+                {" "}
+                Current temperature: {tempMarker}
+                {temp}°
+              </Text>
+              <Text style={styles.weather}>
+                {" "}
+                Feels like: {expectedTempMarker}
+                {feelsLike}°
+              </Text>
+              <Text style={styles.weather}> Expecting: {weather}</Text>
+              <Text style={styles.weather}> Humidity: {humidity}%</Text>
+              <Text style={styles.weather}> Wind speed: {wind.speed}km/h</Text>
+            </View>
           </View>
         </View>
       )}
@@ -190,6 +204,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
     width: 200,
     height: 120,
+    marginLeft: 10,
   },
   division: {
     backgroundColor: Colors.barelySeenWhite,
@@ -203,11 +218,12 @@ const styles = StyleSheet.create({
   flexColumn: {
     alignItems: "flex-start",
     flexDirection: "column",
+    paddingLeft: 20,
   },
   text: {
     color: Colors.white,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "600",
     letterSpacing: 1,
   },
   date: {
@@ -220,10 +236,34 @@ const styles = StyleSheet.create({
   temp: {
     paddingTop: 30,
     color: Colors.white,
-    fontSize: 37,
+    fontSize: 40,
+    paddingLeft: 15,
   },
   expectedTemp: {
     color: Colors.white,
-    fontSize: 16,
+    fontSize: 17,
+  },
+  message: {
+    margin: 30,
+    marginTop: 50,
+    backgroundColor: Colors.purple,
+    fontSize: 18,
+    color: Colors.white,
+    letterSpacing: 1,
+    padding: 15,
+    borderBottomRightRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    lineHeight: 25,
+  },
+  weatherContainer: {
+    marginTop: 20,
+    alignItems: "flex-start",
+    marginLeft: 80,
+  },
+  weather: {
+    marginBottom: 25,
+    fontSize: 19,
+    color: "grey",
   },
 });
