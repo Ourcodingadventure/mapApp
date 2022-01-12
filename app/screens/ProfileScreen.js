@@ -1,4 +1,6 @@
-import React, { useState, useContext } from "react";
+/** @format */
+
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,32 +11,32 @@ import {
   Text,
   Image,
   Button,
-} from "react-native";
-import axios from "axios";
-import * as Yup from "yup";
-import ListItem from "../components/ListItem";
-import ListItemSeperator from "../components/ListItemSeperator.js";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Icon from "../components/Icon";
-import AuthContext from "../Context/AuthContext";
-import environment from "../config/environment/environment";
-import FormField from "../components/form/FormField";
-import Form from "../components/form/Form";
-import SubmitButton from "../components/form/SubmitButton";
-import { authStyle } from "../config/styles";
-import ErrorMessage from "../components/form/ErrorMessage";
-import AppText from "../components/text/AppText";
-import Screen from "../components/Screen";
-import H3 from "../components/text/H3";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Colors from "../config/Colors";
+} from 'react-native';
+import axios from 'axios';
+import * as Yup from 'yup';
+import ListItem from '../components/ListItem';
+import ListItemSeperator from '../components/ListItemSeperator.js';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../components/Icon';
+import AuthContext from '../Context/AuthContext';
+import environment from '../config/environment/environment';
+import FormField from '../components/form/FormField';
+import Form from '../components/form/Form';
+import SubmitButton from '../components/form/SubmitButton';
+import { authStyle } from '../config/styles';
+import ErrorMessage from '../components/form/ErrorMessage';
+import AppText from '../components/text/AppText';
+import Screen from '../components/Screen';
+import H3 from '../components/text/H3';
+import ActivityIndicator from '../components/ActivityIndicator';
+import Colors from '../config/Colors';
 
 const validationSchema = Yup.object().shape({
-  password: Yup.string().required("Required"),
+  password: Yup.string().required('Required'),
   newPassword: Yup.string()
-    .min(6, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+    .min(6, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
 });
 
 export default function ProfileScreen({ navigation }) {
@@ -45,26 +47,26 @@ export default function ProfileScreen({ navigation }) {
   // const globalStateUpdate = useGlobalStateUpdate();
   // const [spinner, setSpinner] = useState(false);
 
-//   const handleSubmit = async ({ password, newPassword }) => {
-//     setLoading(true);
-//     try {
-//       await axios.post(`${environment.baseUrl}/update-password`, {
-//         newPassword,
-//         password: password,
-//       });
-//       setLoading(false);
-//       setError(false);
-//       Alert.alert("Password updated successfully", ``, [
-//         { text: "Go back", onPress: () => setModalVisible(false) },
-//       ]);
-//     } catch (err) {
-//       if (err.response) {
-//         setError(err.response.data.message);
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  //   const handleSubmit = async ({ password, newPassword }) => {
+  //     setLoading(true);
+  //     try {
+  //       await axios.post(`${environment.baseUrl}/update-password`, {
+  //         newPassword,
+  //         password: password,
+  //       });
+  //       setLoading(false);
+  //       setError(false);
+  //       Alert.alert("Password updated successfully", ``, [
+  //         { text: "Go back", onPress: () => setModalVisible(false) },
+  //       ]);
+  //     } catch (err) {
+  //       if (err.response) {
+  //         setError(err.response.data.message);
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
   async function logout() {
     // navigation.navigate('MyRequests')
@@ -88,7 +90,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={styles.flex}>
         <Image
           style={styles.icon}
-          source={require("../assets/icons/mail2.png")}
+          source={require('../assets/icons/mail2.png')}
         />
         <Text style={styles.email}>{user.email}</Text>
       </View>
@@ -172,7 +174,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.purple,
-    height: "100%",
+    height: '100%',
   },
   header: {
     color: Colors.white,
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     fontSize: 20,
     letterSpacing: 3,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   name: {
     marginLeft: 30,
@@ -188,17 +190,17 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize: 25,
     letterSpacing: 3,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   division: {
     marginTop: 20,
     backgroundColor: Colors.barelySeenWhite,
     height: 1,
-    width: "100%",
+    width: '100%',
   },
   flex: {
-    alignItems: "flex-start",
-    flexDirection: "row",
+    alignItems: 'flex-start',
+    flexDirection: 'row',
     marginTop: 30,
     marginLeft: 30,
   },
@@ -215,25 +217,25 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 12,
     letterSpacing: 2,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   modal: {
-    display: "flex",
+    display: 'flex',
     backgroundColor: Colors.purple,
     flex: 1,
   },
   icon: {},
   logoutButton: {
-    textAlign: "center",
+    textAlign: 'center',
     paddingTop: 12,
-    alignSelf: "center",
+    alignSelf: 'center',
     backgroundColor: Colors.pink,
     borderRadius: 50,
     height: 50,
     fontSize: 17,
     color: Colors.white,
-    width: "85%",
-    position: "absolute",
+    width: '85%',
+    position: 'absolute',
     bottom: 20,
   },
 });

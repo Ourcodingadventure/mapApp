@@ -1,27 +1,29 @@
-import axios from "axios";
-import React, { useEffect, useState, useCallback } from "react";
-import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
-import Screen from "../components/Screen";
-import Text from "../components/text/AppText";
-import environment from "../config/environment/environment";
-import Card from "../components/Card";
-import { Marker } from "react-native-maps";
-import MapView from "react-native-maps";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import socket from "../config/socket";
-import ActivityIndicator from "../components/ActivityIndicator";
-import useLocation from "../hooks/useLocation";
-import haversine from "haversine";
-import H3 from "../components/text/H3";
-import Colors from "../config/Colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Loader from "../components/Loader";
+/** @format */
+
+import axios from 'axios';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import Screen from '../components/Screen';
+import Text from '../components/text/AppText';
+import environment from '../config/environment/environment';
+import Card from '../components/Card';
+import { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import socket from '../config/socket';
+import ActivityIndicator from '../components/ActivityIndicator';
+import useLocation from '../hooks/useLocation';
+import haversine from 'haversine';
+import H3 from '../components/text/H3';
+import Colors from '../config/Colors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Loader from '../components/Loader';
 
 export default function HomeScreen({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(false);
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState('');
   const [firstCall, setFirstCall] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { location } = useLocation();
@@ -58,12 +60,12 @@ export default function HomeScreen({ navigation }) {
   };
   useEffect(() => {
     getFeedComplains();
-    socket.on("complain", () => {
+    socket.on('complain', () => {
       setChange(!change);
     });
 
     return () => {
-      socket.off("complain");
+      socket.off('complain');
     };
   }, [change, location]);
 
@@ -82,18 +84,18 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
 
     const date = new Date();
@@ -110,7 +112,7 @@ export default function HomeScreen({ navigation }) {
       selector = day % 10;
     }
 
-    let ordinal = ["th", "st", "nd", "rd", ""][selector];
+    let ordinal = ['th', 'st', 'nd', 'rd', ''][selector];
     setCurrentDate(`${month} ${day}${ordinal} ${year}`);
   }, []);
 
@@ -122,11 +124,11 @@ export default function HomeScreen({ navigation }) {
           ? styles.container
           : [
               styles.container,
-              { alignItems: "center", justifyContent: "center" },
+              { alignItems: 'center', justifyContent: 'center' },
             ]
       }
     >
-      {loading && <Loader source={require("../assets/giphy.gif")} />}
+      {loading && <Loader source={require('../assets/giphy.gif')} />}
       {!loading && feed.length > 0 && (
         <>
           <H3 style={styles.header}>FEED</H3>
@@ -136,8 +138,8 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.date}>{currentDate}</Text>
               <View style={styles.flexStart}>
                 <MaterialCommunityIcons
-                  name="map-marker"
-                  color="white"
+                  name='map-marker'
+                  color='white'
                   size={25}
                 />
                 <Text style={styles.date}>15km</Text>
@@ -162,11 +164,7 @@ export default function HomeScreen({ navigation }) {
                   remarks={item.remarks}
                   count={item.likesCount}
                   createdOn={item.createdOn}
-                  imageUrl={
-                    item.image
-                      ? { uri: `${environment.baseUrl}/${item.image}` }
-                      : false
-                  }
+                  imageUrl={item.image && item.image}
                   subTitle={`By: ${item.name}`}
                   secTitle={`Status: ${item.status}`}
                   issueTitle={item.issueName}
@@ -175,7 +173,7 @@ export default function HomeScreen({ navigation }) {
                       ? () => (
                           <TouchableWithoutFeedback
                             onPress={() =>
-                              navigation.navigate("Map", {
+                              navigation.navigate('Map', {
                                 latitude: item.latitude,
                                 longitude: item.longitude,
                                 latitudeDelta: 0.0922,
@@ -217,8 +215,8 @@ export default function HomeScreen({ navigation }) {
         </>
       )}
       {!loading && !feed.length && (
-        <View style={{ justifyContent: "center" }}>
-          <Text style={{ color: "white" }}>No complains :)</Text>
+        <View style={{ justifyContent: 'center' }}>
+          <Text style={{ color: 'white' }}>No complains :)</Text>
         </View>
       )}
     </Screen>
@@ -257,14 +255,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: Colors.barelySeenWhite,
     height: 1,
-    width: "100%",
+    width: '100%',
   },
   flexStart: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   flexBetween: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
