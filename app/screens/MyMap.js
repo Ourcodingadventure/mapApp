@@ -26,6 +26,7 @@ import {
 import ComplainButton from "../components/ComplainButton";
 import PostButton from "../components/PostButton";
 import Colors from "../config/Colors";
+
 Location.installWebGeolocationPolyfill();
 
 export default function MyMap({ navigation }) {
@@ -37,7 +38,7 @@ export default function MyMap({ navigation }) {
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
   const { coords, setCoords, change, setChange } = useContext(AuthContext);
-  console.log(location);
+
   useEffect(() => {
     let watchID;
     if (track) {
@@ -138,10 +139,9 @@ export default function MyMap({ navigation }) {
           </>
         )}
       </View>
-      {/* <AppText>Loading</AppText> */}
-      {location && (
+
+      {location && !fetching && (
         <MapView
-          userInterfaceStyle={"dark"} //do we want light or dark?
           showsMyLocationButton={true}
           showsBuildings={true}
           showsCompass={true}
@@ -152,7 +152,6 @@ export default function MyMap({ navigation }) {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
-          // onRegionChange={}
           showsUserLocation={true}
           followUserLocation={true}
           overlays={[
@@ -192,25 +191,19 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   card: {
-    // paddingTop: 10,
-    // overflow: "hidden",
-    // justifyContent: "space-between",
-    // alignItems: "center",
-
     backgroundColor: Colors.semiTransparentWhite,
     width: "97%",
     height: 110,
-    // alignSelf: "center",
-    // borderRadius: 15,
-    // marginBottom: 5,
   },
 
   map: {
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height,
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",
+  },
+  image: {
+    height: 400,
+    width: 400,
   },
   iconGo: {
     position: "absolute",
@@ -258,43 +251,4 @@ function regionFrom(lat, lon, distance) {
     latitudeDelta,
     longitudeDelta,
   });
-}
-
-// <View style={styles.footer}>
-// {!track ? (
-//   <Button title="start" onPress={() => setTrack(true)}>
-//     <Image
-//       style={styles.iconGo}
-//       source={require("../assets/icons/go-button.png")}
-//     />
-//   </Button>
-// ) : (
-//   <React.Fragment>
-//     {/* <Image
-//   style={styles.iconStop}
-//   source={require("../assets/icons/stop-button.png")}
-//   onPress={setTrack(false)}
-// /> */}
-//     <Image
-//       style={styles.iconSave}
-//       source={require("../assets/icons/save-location-button.png")}
-//     />
-//   </React.Fragment>
-// )}
-// </View>
-{
-  /* <View>
-            <TouchableOpacity onPress={() => Alert.alert("image clicked")}>
-              <TouchableOpacity
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Image
-                  source={require("../assets/icons/go-button.png")}
-                  style={styles.button}
-                />
-              </TouchableOpacity>
-            </TouchableOpacity>
-          </View> */
 }
