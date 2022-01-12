@@ -55,6 +55,7 @@ export default function MyMap({ navigation }) {
     setTrack(false);
     setTimerOn(false);
     setTimer(0);
+    setDistanceTravelled(0);
   };
 
   useEffect(() => {
@@ -96,7 +97,7 @@ export default function MyMap({ navigation }) {
   const calcDistance = (newLatLng) => {
     return haversine(prevLatLng, newLatLng) || 0;
   };
-  console.log("route", route);
+
   const getFeedComplains = async () => {
     if (firstCall) {
       setLoading(true);
@@ -134,10 +135,19 @@ export default function MyMap({ navigation }) {
       )}
       {!fetching && (
         <View style={styles.flexBetween}>
-          <Text>
-            DistanceTraveled {parseFloat(distanceTravelled).toFixed(2)}
-          </Text>
-          {timerOn && <Timer timer={timer} />}
+          {timerOn && (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Timer style={{ marginBottom: 10 }} timer={timer} />
+              <Text style={{ paddingTop: 10 }}>
+                DistanceTraveled {parseFloat(distanceTravelled).toFixed(2)}
+              </Text>
+            </View>
+          )}
           {!track ? (
             <MaterialCommunityIcons
               name="play"
