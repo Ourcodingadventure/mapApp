@@ -1,8 +1,8 @@
 /** @format */
 
-import React, { useState, useEffect, useContext } from 'react';
-import MapView, { Polyline, Marker } from 'react-native-maps';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState, useEffect, useContext } from "react";
+import MapView, { Polyline, Marker } from "react-native-maps";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
@@ -11,40 +11,33 @@ import {
   Button,
   ImageBackground,
   Text,
-} from 'react-native';
-import socket from '../config/socket';
-import environment from '../config/environment/environment';
-import useLocation from '../hooks/useLocation';
-import AppText from '../components/text/AppText';
-import axios from 'axios';
-import pick from 'lodash/pick';
-import * as Location from 'expo-location';
-import AppButton from '../components/Button';
-import AuthContext from '../Context/AuthContext';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
-import ComplainButton from '../components/ComplainButton';
-import PostButton from '../components/PostButton';
-import Colors from '../config/Colors';
-import Loader from '../components/Loader';
-import Timer from '../components/Timer';
-import haversine from 'haversine';
+} from "react-native";
+import socket from "../config/socket";
+import environment from "../config/environment/environment";
+import useLocation from "../hooks/useLocation";
+import axios from "axios";
+import pick from "lodash/pick";
+import * as Location from "expo-location";
+import AuthContext from "../Context/AuthContext";
+import Colors from "../config/Colors";
+import Loader from "../components/Loader";
+import Timer from "../components/Timer";
+import haversine from "haversine";
+import AppText from "../components/text/AppText";
 
 Location.installWebGeolocationPolyfill();
 
 export default function MyMap({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [translation, setTranslation] = useState(0);
+
   const [firstCall, setFirstCall] = useState(true);
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
   const { location, fetching } = useLocation();
   const [timer, setTimer] = useState(0);
   const [distanceTravelled, setDistanceTravelled] = useState(0);
-  const [prevLatLng, setPrevLatLng] = useState('');
+  const [prevLatLng, setPrevLatLng] = useState("");
   const [timerOn, setTimerOn] = useState(false);
   const { coords, setCoords, change, setChange, user } =
     useContext(AuthContext);
@@ -79,8 +72,8 @@ export default function MyMap({ navigation }) {
       );
       watchID = navigator.geolocation.watchPosition((position) => {
         const positionLatLngs = pick(position.coords, [
-          'latitude',
-          'longitude',
+          "latitude",
+          "longitude",
         ]);
         const newLatLngs = {
           latitude: position.coords.latitude,
@@ -99,11 +92,6 @@ export default function MyMap({ navigation }) {
   const calcDistance = (newLatLng) => {
     return haversine(prevLatLng, newLatLng) || 0;
   };
-<<<<<<< HEAD
-
-=======
-  console.log('route', route);
->>>>>>> e09d7af71d2a7c381bc2a1cc51b221276893dcc1
   const getFeedComplains = async () => {
     if (firstCall) {
       setLoading(true);
@@ -121,23 +109,23 @@ export default function MyMap({ navigation }) {
   const handleAddMarker = (e) => {
     const markerCoords = e.nativeEvent.coordinate;
     setCoords(markerCoords);
-    navigation.navigate('PostComplainTab');
+    navigation.navigate("PostComplainTab");
   };
   useEffect(() => {
     getFeedComplains();
-    socket.on('complain', () => {
+    socket.on("complain", () => {
       setChange(!change);
     });
 
     return () => {
-      socket.off('complain');
+      socket.off("complain");
     };
   }, [change]);
   //todo
   return (
     <View style={StyleSheet.absoluteFillObject}>
       {fetching && (
-        <Loader style={styles.loader} source={require('../assets/giphy.gif')} />
+        <Loader style={styles.loader} source={require("../assets/giphy.gif")} />
       )}
       {!fetching && (
         <View style={styles.flexBetween}>
@@ -149,15 +137,15 @@ export default function MyMap({ navigation }) {
               }}
             >
               <Timer style={{ marginBottom: 10 }} timer={timer} />
-              <Text style={{ paddingTop: 10 }}>
+              <AppText style={{ paddingTop: 10 }}>
                 DistanceTraveled {parseFloat(distanceTravelled).toFixed(2)}
-              </Text>
+              </AppText>
             </View>
           )}
           {!track ? (
             <MaterialCommunityIcons
-              name='play'
-              color={'white'}
+              name="play"
+              color={"white"}
               size={50}
               style={styles.tracingButton}
               onTouchEnd={(e) => {
@@ -169,8 +157,8 @@ export default function MyMap({ navigation }) {
             <>
               <React.Fragment>
                 <MaterialCommunityIcons
-                  name='stop'
-                  color={'white'}
+                  name="stop"
+                  color={"white"}
                   size={50}
                   style={styles.tracingButton}
                   onTouchEnd={(e) => {
@@ -180,8 +168,8 @@ export default function MyMap({ navigation }) {
                 />
 
                 <MaterialCommunityIcons
-                  name='plus'
-                  color={'white'}
+                  name="plus"
+                  color={"white"}
                   size={50}
                   style={styles.tracingButton}
                   onTouchEnd={(e) => {
@@ -213,45 +201,39 @@ export default function MyMap({ navigation }) {
           overlays={[
             {
               coordinates: route,
-              strokeColor: '#19B5FE',
+              strokeColor: "#19B5FE",
               lineWidth: 1000,
             },
           ]}
           onLongPress={(e) => handleAddMarker(e)}
         >
-          {track && (
-            <Polyline
-              coordinates={route}
-              strokeWidth={5}
-              lineDashPattern={[1]}
-            />
-          )}
+          {track && <Polyline coordinates={route} strokeWidth={5} />}
           {feed.map((mark) => {
             const { _id, latitude, issueName, remarks, longitude } = mark;
             let markerColor;
             switch (issueName) {
-              case 'Violent Animals Issue':
-                markerColor = 'green';
+              case "Violent Animals Issue":
+                markerColor = "green";
                 break;
-              case 'Street Light Outage Issue':
-                markerColor = 'yellow';
-              case 'Pavement Issue':
-                markerColor = 'tomato';
+              case "Street Light Outage Issue":
+                markerColor = "yellow";
+              case "Pavement Issue":
+                markerColor = "tomato";
                 break;
-              case 'Illegal Parking Issue':
-                markerColor = 'wheat';
+              case "Illegal Parking Issue":
+                markerColor = "wheat";
                 break;
-              case 'Sewage Issue':
-                markerColor = 'orange';
+              case "Sewage Issue":
+                markerColor = "orange";
                 break;
-              case 'Pathole Issue':
-                markerColor = 'indigo';
+              case "Pathole Issue":
+                markerColor = "indigo";
                 break;
-              case 'Garbage Issue':
-                markerColor = 'teal';
+              case "Garbage Issue":
+                markerColor = "teal";
                 break;
               default:
-                markerColor = 'purple';
+                markerColor = "purple";
                 break;
             }
 
@@ -275,64 +257,64 @@ export default function MyMap({ navigation }) {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
   },
   card: {
     backgroundColor: Colors.purple,
-    width: '100%',
+    width: "100%",
     height: 110,
   },
   headway: {
     fontSize: 50,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     // fontFamily: "sans-serif",
-    color: 'white',
+    color: "white",
     fontSize: 35,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     textShadowColor: Colors.darkPurple,
     textShadowRadius: 4,
     textShadowOffset: { width: 4, height: 4 },
   },
   flexBetween: {
     backgroundColor: Colors.purple,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingRight: 30,
     paddingLeft: 30,
     paddingTop: 20,
     height: 180,
   },
   loader: {
-    position: 'absolute',
+    position: "absolute",
     // left: 0,
     right: 0,
     height: 60,
     width: 60,
-    textAlign: 'center',
+    textAlign: "center",
   },
   tracingButton: {
     paddingTop: 3,
     paddingLeft: 5,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: "white",
     borderRadius: 30,
   },
   map: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   iconGo: {},
   iconStop: {},
   iconSave: {},
 
   button: {
-    backgroundColor: '#DDDDDD',
+    backgroundColor: "#DDDDDD",
     marginTop: 200,
     padding: 30,
   },
