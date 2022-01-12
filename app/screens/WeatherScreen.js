@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { weatherApi } from "../config/environment/environment.js";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import useLocation from "../hooks/useLocation.js";
 
 export default function WeatherScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,7 @@ export default function WeatherScreen({ navigation }) {
   const [place, setPlace] = useState("");
   const [icon, setIcon] = useState(null);
   const [wind, setWind] = useState({});
+  const {location} = useLocation();
 
   const fetchWeather = async (lat, long) => {
     await fetch(
@@ -43,10 +45,8 @@ export default function WeatherScreen({ navigation }) {
 
   useEffect(() => {
     setIsLoading(true);
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      fetchWeather(position.coords.latitude, position.coords.longitude);
-    });
-  }, []);
+    location && fetchWeather(location.latitude, location.longitude)
+  }, [location]);
 
   return (
     <>
