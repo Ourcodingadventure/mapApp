@@ -8,6 +8,7 @@ import {
   Image,
   Button,
   ImageBackground,
+  Text,
 } from "react-native";
 import socket from "../config/socket";
 import environment from "../config/environment/environment";
@@ -24,6 +25,7 @@ import {
 } from "react-native-gesture-handler";
 import ComplainButton from "../components/ComplainButton";
 import PostButton from "../components/PostButton";
+import Colors from "../config/Colors";
 Location.installWebGeolocationPolyfill();
 
 export default function MyMap({ navigation }) {
@@ -84,7 +86,52 @@ export default function MyMap({ navigation }) {
   //todo
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      <AppText>Loading</AppText>
+      <View style={styles.card}>
+        <Text
+          style={{
+            fontSize: 50,
+            paddingTop: 10,
+            display: "flex",
+            // justifyContent: "center",
+            // alignItems: "center",
+          }}
+        >
+          HEADWAY
+        </Text>
+
+        {!track ? (
+          <PostButton
+            onTouchEnd={(e) => {
+              e.stopPropagation();
+            }}
+            style={styles.iconGo}
+            source={require("../assets/icons/go-button.png")}
+            onPress={() => setTrack(true)}
+          />
+        ) : (
+          <>
+            <React.Fragment>
+              <PostButton
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                }}
+                style={styles.iconStop}
+                source={require("../assets/icons/stop-button.png")}
+                onPress={() => setTrack(false)}
+              />
+              <PostButton
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                }}
+                style={styles.iconSave}
+                source={require("../assets/icons/save-location-button.png")}
+                onPress={(e) => handleAddMarker(e)}
+              />
+            </React.Fragment>
+          </>
+        )}
+      </View>
+      {/* <AppText>Loading</AppText> */}
       {location && (
         <MapView
           userInterfaceStyle={"dark"} //do we want light or dark?
@@ -126,38 +173,6 @@ export default function MyMap({ navigation }) {
           })}
         </MapView>
       )}
-
-      {!track ? (
-        <PostButton
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-          }}
-          style={styles.iconGo}
-          source={require("../assets/icons/go-button.png")}
-          onPress={() => setTrack(true)}
-        />
-      ) : (
-        <>
-          <React.Fragment>
-            <PostButton
-              onTouchEnd={(e) => {
-                e.stopPropagation();
-              }}
-              style={styles.iconStop}
-              source={require("../assets/icons/stop-button.png")}
-              onPress={() => setTrack(false)}
-            />
-            <PostButton
-              onTouchEnd={(e) => {
-                e.stopPropagation();
-              }}
-              style={styles.iconSave}
-              source={require("../assets/icons/save-location-button.png")}
-              onPress={(e) => handleAddMarker(e)}
-            />
-          </React.Fragment>
-        </>
-      )}
     </View>
   );
 }
@@ -166,30 +181,47 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
+  },
+  card: {
+    // paddingTop: 10,
+    // overflow: "hidden",
+    // justifyContent: "space-between",
+    // alignItems: "center",
+
+    backgroundColor: Colors.semiTransparentWhite,
+    width: "97%",
+    height: 110,
+    // alignSelf: "center",
+    // borderRadius: 15,
+    // marginBottom: 5,
   },
 
   map: {
-    width: Dimensions.get("window").width,
-    flex: 1,
+    // width: Dimensions.get("window").width,
     // height: Dimensions.get("window").height,
+    flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
   iconGo: {
     position: "absolute",
-    bottom: 50,
-    right: 40,
+    top: 20,
+    right: 10,
     zIndex: 9999999,
   },
   iconStop: {
     position: "absolute",
-    bottom: 50,
-    right: 40,
+    top: 20,
+    right: 10,
+    zIndex: 9999999,
   },
   iconSave: {
     position: "absolute",
-    bottom: 140,
-    right: 40,
+    top: 20,
+    right: 80,
+    zIndex: 9999999,
   },
 
   button: {

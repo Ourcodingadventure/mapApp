@@ -8,6 +8,7 @@ import PostNavigation from "../post-navigation.js/PostNavigation";
 import WeatherScreen from "../../screens/WeatherScreen";
 
 import MyMap from "../../screens/MyMap";
+import MapNav from "../map-nav/MapNav";
 
 const Tab = createBottomTabNavigator();
 
