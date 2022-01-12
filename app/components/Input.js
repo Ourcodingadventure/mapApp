@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
     color: colors.black,
     marginBottom:15,
+    flexDirection: "row"
   },
   input: {
     width: "100%",
@@ -107,5 +108,6 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: "center",
     fontWeight: "500",
+    marginRight: 5,
   },
 });

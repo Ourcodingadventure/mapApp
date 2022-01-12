@@ -5,6 +5,7 @@ import {
   Alert,
   ActivityIndicator,
   ImageBackground,
+  StyleSheet
 } from "react-native";
 import AppText from "../components/text/AppText";
 import { authStyle } from "../config/styles";
@@ -65,20 +66,20 @@ export default function LoginScreen({ navigation }) {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <View style={authStyle.formContainer}>
+        <View style={styles.formContainer}>
           <FormField
             placeholder="Your username"
-            inputContainerStyle={authStyle.input}
+            inputContainerStyle={styles.input}
             name="username"
           />
           <FormField
             placeholder="Your email"
-            inputContainerStyle={[authStyle.input, { marginBottom: 5 }]}
+            inputContainerStyle={styles.input}
             name="email"
           />
           <FormField
             placeholder="Your password"
-            inputContainerStyle={authStyle.input}
+            inputContainerStyle={styles.input}
             secureTextEntry
             name="password"
           />
@@ -109,3 +110,17 @@ export default function LoginScreen({ navigation }) {
     </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderWidth: 0,
+    backgroundColor: "rgba(51,48,49, 0.35)",
+    height: 60,
+    borderRadius: 11,
+  },
+  formContainer: {
+    paddingTop: 100,
+    flex: 1,
+    justifyContent: "center",
+  },
+});
