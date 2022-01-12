@@ -93,18 +93,8 @@ export default function MyMap({ navigation }) {
   //todo
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      <View style={styles.card}>
-        <Text
-          style={{
-            fontSize: 50,
-            paddingTop: 10,
-            display: "flex",
-            // justifyContent: "center",
-            // alignItems: "center",
-          }}
-        >
-          HEADWAY
-        </Text>
+      <View style={styles.flexBetween}>
+        <Text style={styles.headway}>HEADWAY </Text>
 
         {!track ? (
           <PostButton
@@ -192,19 +182,31 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   card: {
-    // paddingTop: 10,
-    // overflow: "hidden",
-    // justifyContent: "space-between",
-    // alignItems: "center",
-
-    backgroundColor: Colors.semiTransparentWhite,
-    width: "97%",
+    backgroundColor: Colors.purple,
+    width: "100%",
     height: 110,
-    // alignSelf: "center",
-    // borderRadius: 15,
-    // marginBottom: 5,
   },
-
+  headway: {
+    fontSize: 50,
+    fontStyle: "italic",
+    fontFamily: "sans-serif",
+    color: "white",
+    fontSize: 35,
+    fontWeight: "bold",
+    textShadowColor: Colors.darkPurple,
+    textShadowRadius: 4,
+    textShadowOffset: { width: 4, height: 4 },
+  },
+  flexBetween: {
+    backgroundColor: Colors.purple,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingRight: 30,
+    paddingLeft: 30,
+    paddingTop: 20,
+    height: 110,
+  },
   map: {
     // width: Dimensions.get("window").width,
     // height: Dimensions.get("window").height,
@@ -212,24 +214,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
-  iconGo: {
-    position: "absolute",
-    top: 20,
-    right: 10,
-    zIndex: 9999999,
-  },
-  iconStop: {
-    position: "absolute",
-    top: 20,
-    right: 10,
-    zIndex: 9999999,
-  },
-  iconSave: {
-    position: "absolute",
-    top: 20,
-    right: 80,
-    zIndex: 9999999,
-  },
+  iconGo: {},
+  iconStop: {},
+  iconSave: {},
 
   button: {
     backgroundColor: "#DDDDDD",
@@ -258,43 +245,4 @@ function regionFrom(lat, lon, distance) {
     latitudeDelta,
     longitudeDelta,
   });
-}
-
-// <View style={styles.footer}>
-// {!track ? (
-//   <Button title="start" onPress={() => setTrack(true)}>
-//     <Image
-//       style={styles.iconGo}
-//       source={require("../assets/icons/go-button.png")}
-//     />
-//   </Button>
-// ) : (
-//   <React.Fragment>
-//     {/* <Image
-//   style={styles.iconStop}
-//   source={require("../assets/icons/stop-button.png")}
-//   onPress={setTrack(false)}
-// /> */}
-//     <Image
-//       style={styles.iconSave}
-//       source={require("../assets/icons/save-location-button.png")}
-//     />
-//   </React.Fragment>
-// )}
-// </View>
-{
-  /* <View>
-            <TouchableOpacity onPress={() => Alert.alert("image clicked")}>
-              <TouchableOpacity
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Image
-                  source={require("../assets/icons/go-button.png")}
-                  style={styles.button}
-                />
-              </TouchableOpacity>
-            </TouchableOpacity>
-          </View> */
 }
