@@ -26,13 +26,14 @@ import {
 import ComplainButton from "../components/ComplainButton";
 import PostButton from "../components/PostButton";
 import Colors from "../config/Colors";
+import Loader from "../components/Loader";
 
 Location.installWebGeolocationPolyfill();
 
 export default function MyMap({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [translation, setTranslation] = useState(0);
   const [firstCall, setFirstCall] = useState(true);
   const [route, setRoute] = useState([]);
   const [track, setTrack] = useState(false);
@@ -94,71 +95,53 @@ export default function MyMap({ navigation }) {
   //todo
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      <View style={styles.flexBetween}>
-        <Text style={styles.headway}>HEADWAY </Text>
+      {fetching && (
+        <Loader style={styles.loader} source={require("../assets/giphy.gif")} />
+      )}
+      {!fetching && (
+        <View style={styles.flexBetween}>
+          <Text style={styles.headway}>HEADWAY </Text>
 
-        {!track ? (
-          // <PostButton
-          //   onTouchEnd={(e) => {
-          //     e.stopPropagation();
-          //   }}
-          //   style={styles.iconGo}
-          //   source={require("../assets/icons/go-button.png")}
-          //   onPress={() => setTrack(true)}
-          // />
-          <MaterialCommunityIcons
-            name="play"
-            color={"white"}
-            size={50}
-            style={styles.tracingButton}
-            onTouchEnd={(e) => {
-              e.stopPropagation();
-            }}
-            onPress={() => setTrack(true)}
-          />
-        ) : (
-          <>
-            <React.Fragment>
-              {/* <PostButton
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-                style={styles.iconStop}
-                source={require("../assets/icons/stop-button.png")}
-                onPress={() => setTrack(false)}
-              /> */}
-              <MaterialCommunityIcons
-                name="stop"
-                color={"white"}
-                size={50}
-                style={styles.tracingButton}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-                onPress={() => setTrack(false)}
-              />
-              {/* <PostButton
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-                style={styles.iconSave}
-                source={require("../assets/icons/save-location-button.png")}
-                onPress={(e) => handleAddMarker(e)}
-              /> */}
-              <MaterialCommunityIcons
-                name="plus"
-                color={"white"}
-                size={50}
-                style={styles.tracingButton}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                }}
-                onPress={(e) => handleAddMarker(e)}
-              />
-            </React.Fragment>
-          </>
-        )}
-      </View>
+          {!track ? (
+            <MaterialCommunityIcons
+              name="play"
+              color={"white"}
+              size={50}
+              style={styles.tracingButton}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+              }}
+              onPress={() => setTrack(true)}
+            />
+          ) : (
+            <>
+              <React.Fragment>
+                <MaterialCommunityIcons
+                  name="stop"
+                  color={"white"}
+                  size={50}
+                  style={styles.tracingButton}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onPress={() => setTrack(false)}
+                />
+
+                <MaterialCommunityIcons
+                  name="plus"
+                  color={"white"}
+                  size={50}
+                  style={styles.tracingButton}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onPress={(e) => handleAddMarker(e)}
+                />
+              </React.Fragment>
+            </>
+          )}
+        </View>
+      )}
 
       {location && !fetching && (
         <MapView
@@ -236,12 +219,20 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     height: 110,
   },
+  loader: {
+    position: "absolute",
+    // left: 0,
+    right: 0,
+    height: 60,
+    width: 60,
+    textAlign: "center",
+  },
   tracingButton: {
     paddingTop: 3,
     paddingLeft: 5,
     borderWidth: 2,
     borderColor: "white",
-    borderRadius: 50,
+    borderRadius: 30,
   },
   map: {
     flex: 1,
