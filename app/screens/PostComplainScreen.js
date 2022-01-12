@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
+  Text,
 } from "react-native";
 import AppText from "../components/text/AppText";
 import H3 from "../components/text/H2";
@@ -134,84 +135,77 @@ export default function PostComplainScreen({ navigation }) {
     <View style={styles.screen}>
       <Screen>
         <ScrollView style={styles.container}>
-          <H3 style={styles.header}>POST WARNING</H3>
+          <H3 style={styles.header}>ADD A WARNING</H3>
           <View style={styles.division}></View>
+          <Text style={styles.point1}>POINT 1</Text>
 
-          <View style={authStyle.formContainer}>
-            <AppText style={authStyle.text}>Choose Category</AppText>
-            <Picker
-              items={category}
-              selectedItem={selectedItem}
-              onSelectItem={(item) => setSelectedItem(item)}
-            />
-            {(!fetching && !location) ||
-              (gallery && (
-                <React.Fragment>
-                  <AppText>Location</AppText>
-                  <Input
-                    value={locationText}
-                    onChangeText={(e) => setLocationText(e)}
-                  />
-                </React.Fragment>
-              ))}
-            <AppText style={authStyle.text}>Message</AppText>
-            <Input
-              placeholder="Enter any message here"
-              numberOfLines={4}
-              value={message}
-              onChangeText={(e) => setMessage(e)}
-            />
-            <AppText style={authStyle.text}>Send complain as anonymous</AppText>
-            <Button
-              title={anonymous ? "Anoymous mode" : "Not anonymous mode"}
-              style={{
-                backgroundColor: "white",
-                marginTop: 5,
-                marginBottom: 5,
-              }}
-              buttonFontStyle={{
-                color: Colors.primaryLight,
-                fontWeight: "600",
-              }}
-              onPress={() => setAnonymous(!anonymous)}
-            />
+          <View style={styles.flexBetween}>
+            <Text style={styles.problem}>PROBLEM</Text>
             <View>
-              <AppText style={authStyle.text}>Choose From Gallery</AppText>
-              <ImageInput
-                imageUri={imageUri}
-                onChangeImage={(uri) => setFromGallery(uri)}
-              />
-
-              <Camera
-                imageUri={imageUri}
-                onChangeImage={(uri) => setFromCamera(uri)}
-              />
-              <ErrorMessage
-                visible={error}
-                error={error}
-                style={{ textAlign: "center", marginTop: 30 }}
+              <Picker
+                style={styles.picker}
+                items={category}
+                selectedItem={selectedItem}
+                onSelectItem={(item) => setSelectedItem(item)}
               />
             </View>
-
-            {/* <MaterialCommunityIcons
-                    name="camera"
-                    size={32}
-                    style={{ alignSelf: 'flex-end' }}
-                />
-                <MaterialCommunityIcons
-                    name="file"
-                    size={32}
-                    style={{ alignSelf: 'flex-end' }}
-                /> */}
           </View>
 
-          <View style={authStyle.registerBtn}>
+          <View style={styles.division2}></View>
+
+          <AppText style={styles.description}>DESCRIPTION</AppText>
+          <Input
+            style={styles.message}
+            placeholder="Describe the problem..."
+            numberOfLines={4}
+            value={message}
+            onChangeText={(e) => setMessage(e)}
+          />
+
+          <View style={styles.flexBetween}>
+            <AppText style={styles.addAPicture}>ADD A PICTURE</AppText>
+            <Camera
+              style={styles.image}
+              imageUri={imageUri}
+              onChangeImage={(uri) => setFromCamera(uri)}
+            />
+          </View>
+          <ImageInput
+            style={styles.image}
+            imageUri={imageUri}
+            onChangeImage={(uri) => setFromGallery(uri)}
+          />
+
+          <View style={styles.division3}></View>
+
+          <ErrorMessage
+            visible={error}
+            error={error}
+            style={{ textAlign: "center", marginTop: 30 }}
+          />
+
+          <View style={styles.registerBtn}>
             {!loading && !fetching ? (
-              <Button title="Post" onPress={handleSubmit} />
+              <Button title="POST" onPress={handleSubmit} />
             ) : (
               <ActivityIndicator color={!fetching ? Colors.primary : "white"} />
             )}
           </View>
+
+          <Text style={styles.anonim} onPress={() => setAnonymous(!anonymous)}>
+            {anonymous ? "ANONYMOUS MODE" : "NOT ANONYMOUS MODE"}
+          </Text>
+
+          {(!fetching && !location) ||
+            (gallery && (
+              <React.Fragment>
+                {/* <AppText>Location</AppText> */}
+                <Input
+                  value={locationText}
+                  onChangeText={(e) => setLocationText(e)}
+                />
+              </React.Fragment>
+            ))}
         </ScrollView>
       </Screen>
     </View>
@@ -225,7 +219,6 @@ const styles = StyleSheet.create({
   },
   container: {
     borderRadius: 20,
-    // marginTop: 60,
     backgroundColor: Colors.white,
     height: "100%",
   },
@@ -235,7 +228,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     fontSize: 18,
     letterSpacing: 3,
-    fontWeight: "600",
+    fontWeight: "700",
   },
   name: {
     marginLeft: 30,
@@ -247,6 +240,21 @@ const styles = StyleSheet.create({
   },
   division: {
     marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: Colors.grey,
+    height: 1,
+    width: "100%",
+  },
+  division2: {
+    marginTop: 0,
+    marginBottom: 20,
+    backgroundColor: Colors.grey,
+    height: 1,
+    width: "100%",
+  },
+  division3: {
+    marginTop: 20,
+    marginBottom: 10,
     backgroundColor: Colors.grey,
     height: 1,
     width: "100%",
@@ -271,5 +279,66 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 2,
     fontWeight: "600",
+  },
+  flexBetween: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+    paddingRight: 30,
+    paddingLeft: 30,
+  },
+  problem: {
+    letterSpacing: 2,
+    fontSize: 14,
+  },
+  picker: {
+    color: "#FFF",
+    backgroundColor: "grey",
+    paddingRight: 33,
+    paddingLeft: 23,
+    borderRadius: 30,
+    fontSize: 16,
+    borderWidth: 0,
+  },
+  point1: {
+    color: "#6C7B8AFF",
+    marginLeft: 28,
+    fontSize: 23,
+    letterSpacing: 2,
+  },
+  description: {
+    fontSize: 14,
+    marginLeft: 30,
+    letterSpacing: 2,
+    marginBottom: 15,
+  },
+  addAPicture: {
+    paddingTop: 10,
+    fontSize: 14,
+    letterSpacing: 2,
+    marginBottom: 15,
+  },
+  message: {
+    color: "black",
+    fontSize: 16,
+  },
+  image: {},
+  registerBtn: {
+    alignSelf: "center",
+    justifyContent: "flex-end",
+    width: "100%",
+    marginBottom: 10,
+    marginTop: 30,
+    paddingRight: 30,
+    paddingLeft: 30,
+  },
+  anonim: {
+    fontSize: 15,
+    alignSelf: "center",
+    justifyContent: "flex-end",
+    color: "#6C7B8AFF",
+    fontSize:13,
+
   },
 });

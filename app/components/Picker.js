@@ -65,27 +65,26 @@ export default function Picker({ onPress, selectedItem, onSelectItem, inputConta
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F5F5F5',
-        borderRadius: 20,
         flexDirection: 'row',
-        width: '100%',
         paddingLeft: 10,
         borderColor: "#F5F5F5",
         height: 40,
         marginVertical: 5,
-        borderWidth: 2,
+        borderWidth: 0,
         borderColor: colors.primary,
     },
     input: {
         width: '100%',
         paddingLeft: 10,
-        color: colors.primary,
         fontWeight: "500",
-        flex: 1
+        flex: 1,
+        color: "#FFFFFFFF",
     },
     icon: {
-        alignSelf: 'center',
-        fontWeight: "500",
+        position: "absolute",
+        right: 3,
+        bottom: 7,
+        color: "rgba(255,255,255, 0.8)",
     }
     ,
     modal: {

@@ -55,8 +55,7 @@ export default function AppCamera({ imageUri, onChangeImage }) {
     return (
         <React.Fragment>
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <MaterialCommunityIcons name='camera' color={'black'} size={50} style={{ alignSelf: 'center' }} />
-                <Text style={{ alignSelf: 'center' }}>Capture from camera</Text>
+                <MaterialCommunityIcons name='camera' color={colors.purple} size={50} style={{ alignSelf: 'center' }} />
             </TouchableOpacity>
 
             <Modal visible={modalVisible}
@@ -118,8 +117,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light,
         borderRadius: 15,
         justifyContent: 'center',
-        height: 100,
-        width: 100,
         overflow: 'hidden'
     },
     image: {

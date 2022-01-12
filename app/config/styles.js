@@ -56,22 +56,6 @@ const authStyle = StyleSheet.create({
     height: 60,
     borderRadius: 11,
   },
-//   headerContainer: {
-//     marginHorizontal: 10,
-//     backgroundColor: colors.primary,
-//   },
-//   headerText: {
-//     fontWeight: "bold",
-//     color: "#333",
-//     textAlign: "center",
-//     marginTop: 35,
-//     color: "white",
-//   },
-//   text: {
-//     color: colors.primary,
-//     fontSize: 14,
-//     fontWeight: "500",
-//   },
   registerBtn: {
     alignSelf: "center",
     justifyContent: "flex-end",
@@ -79,15 +63,6 @@ const authStyle = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
   },
-//   organizationContainer: {
-//     marginTop: 5,
-//     flexDirection: "row",
-//     display: "flex",
-//     marginBottom: 20,
-//   },
-//   active: {
-//     backgroundColor: "white",
-//   },
   image: {
     flex: 1,
     justifyContent: "center",
