@@ -31,6 +31,9 @@ function Card({
   const [isDisliked, setIsDisliked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
 
+  useEffect(()=>{
+    count<-4 && axios.post(`${environment.baseUrl}/delete-complain`, {id});
+  }, [])
   useEffect(() => {
     typeof count === "number" && count === count && setLikesCount(count);
   }, [count]);
